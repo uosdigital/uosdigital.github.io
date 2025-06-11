@@ -58,6 +58,41 @@
     font-family: 'source-serif-pro';
     font-weight: 700;
   }
+
+  .responsive-iframe-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.responsive-iframe-container iframe,
+.responsive-iframe-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-placeholder {
+  background-color: black;
+  cursor: pointer;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  background: url('images/play-solid.svg') no-repeat center center;
+  background-size: contain;
+  border: none;
+  pointer-events: none;
+}
+
   </style>
  </head>
  <body>
@@ -212,12 +247,15 @@
       Watch our 'Applying for postgraduate study' video to learn more about the application process at the University of Sheffield. This 11-minute talk covers what to do before you apply, the application process itself, and what happens after you've submitted your application.
      </p>
     </div>
-    <div class="video-container" data-aos="fade-in">
-     <!-- Responsive YouTube Video Embed -->
-     <div class="responsive-iframe-container">
-      <iframe allow="autoplay *; fullscreen *; encrypted-media *" allowfullscreen="" id="kaltura_player" mozallowfullscreen="" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&amp;entry_id=1_i81n3wr6&amp;config%5Bprovider%5D=%7B%22widgetId%22%3A%221_k25mz0li%22%7D&amp;config%5Bplayback%5D=%7B%22startTime%22%3A0%7D" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" title="Applying for Postgraduate Study Talk" webkitallowfullscreen="">
-      </iframe>
-     </div>
+   <div class="video-container" data-aos="fade-in">
+  <div class="responsive-iframe-container video-placeholder"
+       data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_i81n3wr6&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_k25mz0li%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D"
+       onclick="loadVideo(this)">
+    <img src="images/applying.jpg" alt="Applying for Postgraduate Study Talk" loading="lazy" />
+    <button class="play-button" aria-label="Play video"></button>
+  </div>
+</div>
+
      <div class="copy-container">
       <h3 class="rank">
        You can track the progress of your application
@@ -355,5 +393,20 @@
     once: true
   });
   </script>
+  <script>
+function loadVideo(container) {
+  const src = container.getAttribute('data-src');
+  const iframe = document.createElement('iframe');
+  iframe.src = src;
+  iframe.allow = "autoplay *; fullscreen *; encrypted-media *";
+  iframe.allowFullscreen = true;
+  iframe.title = container.querySelector('img')?.alt || "Embedded video";
+  iframe.sandbox = "allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation";
+  iframe.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:0";
+
+  container.innerHTML = '';
+  container.appendChild(iframe);
+}
+</script>
  </body>
 </html>
