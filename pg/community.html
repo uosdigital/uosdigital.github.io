@@ -57,6 +57,40 @@
     font-family: 'source-serif-pro';
     font-weight: 700;
   }
+
+  .video-inner {
+  position: relative;
+  padding-bottom: 177.78%; /* 9:16 aspect ratio for vertical videos */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-inner iframe,
+.video-inner img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-placeholder {
+  background-color: black;
+  cursor: pointer;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  background: url('images/play-solid.svg') no-repeat center center;
+  background-size: contain;
+  border: none;
+  pointer-events: none;
+}
   </style>
  </head>
  <body>
@@ -293,34 +327,47 @@
      <h2 class="hotmess">
       Our latest postgrad TikToks
      </h2>
-  <div class="video-scroll-section">
-     <div class="scroll-container">
-      <div class="video-wrapper">
-       <div class="video-inner" data-aos="zoom-in" data-aos-delay="0">
-        <iframe allow="autoplay *; fullscreen *; encrypted-media *" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-presentation" src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&amp;entry_id=1_46zn0a1k" title="Vertical test">
-        </iframe>
-       </div>
+<div class="video-scroll-section">
+  <div class="scroll-container">
+
+    <div class="video-wrapper">
+      <div class="video-inner video-placeholder" data-aos="zoom-in" data-aos-delay="0"
+           data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_46zn0a1k"
+           onclick="loadVideo(this)">
+        <img src="images/tiknever.png" alt="Video thumbnail 12" loading="lazy" />
+        <button class="play-button" aria-label="Play video"></button>
       </div>
-      <div class="video-wrapper">
-       <div class="video-inner" data-aos="zoom-in" data-aos-delay="300">
-        <iframe allow="autoplay *; fullscreen *; encrypted-media *" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-presentation" src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&amp;entry_id=1_ex750ccr&amp;config%5Bprovider%5D=%7B%22widgetId%22%3A%221_cf8wqdzu%22%7D&amp;config%5Bplayback%5D=%7B%22startTime%22%3A0%7D" title="Vertical test">
-        </iframe>
-       </div>
+    </div>
+
+    <div class="video-wrapper">
+      <div class="video-inner video-placeholder" data-aos="zoom-in" data-aos-delay="300"
+           data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_ex750ccr&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_cf8wqdzu%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D"
+           onclick="loadVideo(this)">
+        <img src="images/tiklife.png" alt="Video thumbnail 2" loading="lazy" />
+        <button class="play-button" aria-label="Play video"></button>
       </div>
-      <div class="video-wrapper">
-       <div class="video-inner" data-aos="zoom-in" data-aos-delay="600">
-        <iframe allow="autoplay *; fullscreen *; encrypted-media *" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-presentation" src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&amp;entry_id=1_wtvvha2u&amp;config%5Bprovider%5D=%7B%22widgetId%22%3A%221_kcj094x4%22%7D&amp;config%5Bplayback%5D=%7B%22startTime%22%3A0%7D" title="Vertical test">
-        </iframe>
-       </div>
+    </div>
+
+    <div class="video-wrapper">
+      <div class="video-inner video-placeholder" data-aos="zoom-in" data-aos-delay="600"
+           data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_wtvvha2u&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_kcj094x4%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D"
+           onclick="loadVideo(this)">
+        <img src="images/tikwhy.png" alt="Video thumbnail 3" loading="lazy" />
+        <button class="play-button" aria-label="Play video"></button>
       </div>
-      <div class="video-wrapper">
-       <div class="video-inner" data-aos="zoom-in" data-aos-delay="900">
-        <iframe allow="autoplay *; fullscreen *; encrypted-media *" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-presentation" src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&amp;entry_id=1_703rxxg1&amp;config%5Bprovider%5D=%7B%22widgetId%22%3A%221_bjkwowit%22%7D&amp;config%5Bplayback%5D=%7B%22startTime%22%3A0%7D" title="Vertical test">
-        </iframe>
-       </div>
+    </div>
+
+    <div class="video-wrapper">
+      <div class="video-inner video-placeholder" data-aos="zoom-in" data-aos-delay="900"
+           data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_703rxxg1&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_bjkwowit%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D"
+           onclick="loadVideo(this)">
+        <img src="images/tikday.png" alt="Video thumbnail 4" loading="lazy" />
+        <button class="play-button" aria-label="Play video"></button>
       </div>
-     </div>
-     </div>
+    </div>
+
+  </div>
+</div>
     </div>
    </div>
    <div class="contents-container">
@@ -563,5 +610,20 @@
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   </script>
+  <script>
+function loadVideo(container) {
+  const src = container.getAttribute('data-src');
+  const iframe = document.createElement('iframe');
+  iframe.src = src;
+  iframe.allow = "autoplay *; fullscreen *; encrypted-media *";
+  iframe.allowFullscreen = true;
+  iframe.title = "Embedded video";
+  iframe.sandbox = "allow-same-origin allow-scripts allow-popups allow-presentation";
+  iframe.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:0";
+
+  container.innerHTML = '';
+  container.appendChild(iframe);
+}
+</script>
  </body>
 </html>
