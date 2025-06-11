@@ -58,6 +58,41 @@
     font-family: 'source-serif-pro';
     font-weight: 700;
   }
+
+  .responsive-iframe-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.responsive-iframe-container iframe,
+.responsive-iframe-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-placeholder {
+  cursor: pointer;
+  background-color: black;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url('images/play-solid.svg') no-repeat center center;
+  background-size: contain;
+  border: none;
+  width: 80px;
+  height: 80px;
+  pointer-events: none; /* click goes to parent */
+}
+
   </style>
  </head>
  <body>
@@ -203,13 +238,16 @@
       We’re proud to be chosen by students as the University of the Year at the Whatuni Student Choice Awards 2024.
      </p>
     </div>
-    <div class="video-container" data-aos="zoom-in" data-aos-delay="300">
-     <!-- Responsive YouTube Video Embed -->
-     <div class="responsive-iframe-container">
-      <iframe allow="autoplay *; fullscreen *; encrypted-media *" allowfullscreen="" id="kaltura_player" mozallowfullscreen="" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&amp;entry_id=1_qfevatm8&amp;config%5Bprovider%5D=%7B%22widgetId%22%3A%221_95ndfxyr%22%7D&amp;config%5Bplayback%5D=%7B%22startTime%22%3A0%7D" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" title="Why study a masters at Sheffield? | University of Sheffield" webkitallowfullscreen="">
-      </iframe>
-     </div>
-    </div>
+  <div class="video-container" data-aos="zoom-in" data-aos-delay="300">
+  <div class="responsive-iframe-container video-placeholder" onclick="loadVideo(this)">
+    <img 
+      src="images/uni.jpeg" 
+      alt="Video thumbnail"
+      loading="lazy"
+    />
+    <button class="play-button" aria-label="Play video"></button>
+  </div>
+</div>
     <div class="copy-container">
      <p>
      </p>
@@ -421,5 +459,19 @@
     once: true
   });
   </script>
+  <script>
+function loadVideo(container) {
+  const iframe = document.createElement('iframe');
+  iframe.src = "https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_qfevatm8&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_95ndfxyr%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D";
+  iframe.allow = "autoplay *; fullscreen *; encrypted-media *";
+  iframe.allowFullscreen = true;
+  iframe.title = "Why study a masters at Sheffield? | University of Sheffield";
+  iframe.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:0";
+  iframe.sandbox = "allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation";
+
+  container.innerHTML = ''; // Remove thumbnail + play button
+  container.appendChild(iframe);
+}
+</script>
  </body>
 </html>
