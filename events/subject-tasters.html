@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Events List</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background: #f7f7f7;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #event-modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      position: relative;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+    }
+
+    #modal-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    a#modal-cta {
+      display: inline-block;
+      margin-top: 1rem;
+      background: #0075cf;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    a#modal-cta:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+
+  <input type="text" id="search" placeholder="Search events..." />
+
+  <div id="events-container"></div>
+
+  <!-- Modal -->
+  <div id="event-modal" class="hidden">
+    <div class="modal-content">
+      <button id="modal-close">&times;</button>
+      <h2 id="modal-title"></h2>
+      <p><strong>Date:</strong> <span id="modal-date"></span></p>
+      <p><strong>Time:</strong> <span id="modal-time"></span></p>
+      <p><strong>Timezone:</strong> <span id="modal-timezone"></span></p>
+      <p><strong>Subject:</strong> <span id="modal-subject"></span></p>
+      <p><strong>Location:</strong> <span id="modal-location"></span></p>
+      <p><strong>Summary:</strong> <span id="modal-summary"></span></p>
+      <p><strong>Schedule:</strong> <span id="modal-schedule"></span></p>
+      <a id="modal-cta" target="_blank">Book now</a>
+    </div>
+  </div>
+
+  <script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRglOuQF_dP2rv4MBMODpPo6Q19ScQHvp8ETjApBE-VQDnpkXU24u0A4VWec_fajOzl193h6QEGd_gw/pub?output=csv';
+    let allEvents = [];
+
+    function renderEvents(events) {
+      const container = document.getElementById('events-container');
+      container.innerHTML = '';
+      events.forEach((event, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>${event['Event title']}</h3>
+          <p><strong>Date:</strong> ${event['Date']}</p>
+          <p><strong>Time:</strong> ${event['Time']} ${event['Timezone']}</p>
+          <p><strong>Subject:</strong> ${event['Subject']}</p>
+          <p><strong>Location:</strong> ${event['Location']}</p>
+          <p>${event['Summary']}</p>
+        `;
+        card.addEventListener('click', () => showModal(event));
+        container.appendChild(card);
+      });
+    }
+
+    function showModal(event) {
+      document.getElementById('modal-title').textContent = event['Event title'];
+      document.getElementById('modal-date').textContent = event['Date'];
+      document.getElementById('modal-time').textContent = event['Time'];
+      document.getElementById('modal-timezone').textContent = event['Timezone'];
+      document.getElementById('modal-subject').textContent = event['Subject'];
+      document.getElementById('modal-location').textContent = event['Location'];
+      document.getElementById('modal-summary').textContent = event['Summary'];
+      document.getElementById('modal-schedule').textContent = event['Schedule'];
+      const cta = document.getElementById('modal-cta');
+      cta.href = event['Booking URL'];
+      cta.textContent = event['CTA'] || 'Book now';
+      document.getElementById('event-modal').classList.remove('hidden');
+    }
+
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('event-modal').classList.add('hidden');
+    });
+
+    document.getElementById('search').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = allEvents.filter(ev =>
+        ev['Event title'].toLowerCase().includes(query) ||
+        ev['Subject'].toLowerCase().includes(query) ||
+        ev['Summary'].toLowerCase().includes(query)
+      );
+      renderEvents(filtered);
+    });
+
+    Papa.parse(csvUrl, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        allEvents = results.data.filter(ev => ev['Live']?.toLowerCase() === 'yes');
+        renderEvents(allEvents);
+      }
+    });
+  </script>
+
+</body>
+</html>
