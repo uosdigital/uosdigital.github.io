@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+     <link href="https://use.typekit.net/jou7rrz.css" rel="stylesheet"/>
+   <link href="https://use.typekit.net/hvq7yfy.css" rel="stylesheet"/>
+  <title>Gallery</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'source-sans-pro';
+      background: #f4f4f4;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        margin-top: 2rem;
+    }
+
+    .cover {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 9 / 16 = 0.5625 = 56.25% */
+  background: url('wave.jpg') no-repeat center/cover;
+  color: white;
+  cursor: pointer;
+}
+
+.cover-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 2rem;
+  z-index: 1;
+}
+
+    .cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    }
+
+ 
+
+    .cover .badge {
+      background: #7000FF;
+      color: white;
+      font-size: 0.9rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+
+    }
+
+
+    .cover h2 {
+      margin: 0 0 0.3rem;
+      font-size: 1.8rem;
+      font-family: 'source-serif-pro';
+      font-weight: 700;
+    }
+
+    .cover p {
+      margin: 0 0 1rem;
+     
+    }
+
+    .cover a {
+      color: white;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .modal img {
+      max-width: 90vw;
+      max-height: 70vh;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-description {
+      color: #eee;
+      margin-top: 1rem;
+      text-align: center;
+      max-width: 80%;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .arrow.left { left: 2rem; }
+    .arrow.right { right: 2rem; }
+
+    .close {
+      position: absolute;
+      top: 1.2rem;
+      right: 2rem;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+<div class="cover" onclick="openModal(0)">
+  <div class="cover-content">
+    <div class="badge">Gallery</div>
+    <h2>Journalism facilities at Sheffield</h2>
+    <p>See behind the scenes of our newsrooms, broadcast facilities, teaching spaces and podcast studios.</p>
+    <a>Browse all 6 images →</a>
+  </div>
+</div>
+</div>
+<div class="modal" id="galleryModal">
+  <div class="close" onclick="closeModal()">✕</div>
+  <div class="arrow left" onclick="prevImage()">←</div>
+  <img id="modalImage" src="" alt="Gallery image">
+  <div class="arrow right" onclick="nextImage()">→</div>
+  <div class="modal-description" id="modalDescription"></div>
+</div>
+
+<script>
+  const images = [
+    {
+      src: "wave.jpg",
+      description: "Our state-of-the-art newsroom facilities inside The Wave."
+    },
+    {
+      src: "lecture.jpg",
+      description: "Professional broadcast equipment and studios."
+    },
+    {
+      src: "edit.jpg",
+      description: "Modern teaching spaces and collaborative learning zones."
+    },
+    {
+      src: "radio.jpg",
+      description: "Podcast studios designed for clear audio production."
+    },
+    {
+      src: "teaching.jpg",
+      description: "Dedicated editing suites for student projects."
+    },
+    {
+      src: "studio.jpg",
+      description: "Collaborative areas and breakout zones for team work."
+    }
+  ];
+
+  let current = 0;
+
+  const modal = document.getElementById('galleryModal');
+  const modalImage = document.getElementById('modalImage');
+  const modalDescription = document.getElementById('modalDescription');
+
+  function openModal(index) {
+    current = index;
+    updateModal();
+    modal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+  }
+
+  function updateModal() {
+    modalImage.src = images[current].src;
+    modalDescription.textContent = images[current].description;
+  }
+
+  function prevImage() {
+    current = (current - 1 + images.length) % images.length;
+    updateModal();
+  }
+
+  function nextImage() {
+    current = (current + 1) % images.length;
+    updateModal();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (modal.style.display === 'flex') {
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'Escape') closeModal();
+    }
+  });
+
+  // Swipe support
+  let startX = 0;
+  modal.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  modal.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (diff > 50) prevImage();
+    if (diff < -50) nextImage();
+  });
+</script>
+
+</body>
+</html>
