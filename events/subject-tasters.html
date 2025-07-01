@@ -46,7 +46,7 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .modal-content {
@@ -113,14 +113,18 @@
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRglOuQF_dP2rv4MBMODpPo6Q19ScQHvp8ETjApBE-VQDnpkXU24u0A4VWec_fajOzl193h6QEGd_gw/pub?output=csv';
     let allEvents = [];
 
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('event-modal').classList.add('hidden');
+    });
+
     function renderEvents(events) {
       const container = document.getElementById('events-container');
       container.innerHTML = '';
-      events.forEach((event, index) => {
+      events.forEach((event) => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <h3>${event['Event title']}</h3>
+          <h3>${event['Event Title'] || 'Untitled'}</h3>
           <p><strong>Date:</strong> ${event['Date']}</p>
           <p><strong>Time:</strong> ${event['Time']} ${event['Timezone']}</p>
           <p><strong>Subject:</strong> ${event['Subject']}</p>
@@ -132,17 +136,34 @@
       });
     }
 
+    function formatSchedule(raw) {
+  if (!raw) return '';
+
+  // Split on each asterisk used for bullets
+  const parts = raw.split(/\*\s*/).map(p => p.trim()).filter(Boolean);
+
+  if (parts.length === 0) return `<p>${raw}</p>`;
+
+  const intro = parts[0];
+  const bullets = parts.slice(1);
+
+  return `<p>${intro}</p><ul>${bullets.map(item => `<li>${item}</li>`).join('')}</ul>`;
+}
+
+
     function showModal(event) {
-      document.getElementById('modal-title').textContent = event['Event title'];
-      document.getElementById('modal-date').textContent = event['Date'];
-      document.getElementById('modal-time').textContent = event['Time'];
-      document.getElementById('modal-timezone').textContent = event['Timezone'];
-      document.getElementById('modal-subject').textContent = event['Subject'];
-      document.getElementById('modal-location').textContent = event['Location'];
-      document.getElementById('modal-summary').textContent = event['Summary'];
-      document.getElementById('modal-schedule').textContent = event['Schedule'];
+      document.getElementById('modal-title').textContent = event['Event Title'] || 'Untitled';
+      document.getElementById('modal-date').textContent = event['Date'] || '';
+      document.getElementById('modal-time').textContent = event['Time'] || '';
+      document.getElementById('modal-timezone').textContent = event['Timezone'] || '';
+      document.getElementById('modal-subject').textContent = event['Subject'] || '';
+      document.getElementById('modal-location').textContent = event['Location'] || '';
+      document.getElementById('modal-summary').textContent = event['Summary'] || '';
+
+      document.getElementById('modal-schedule').innerHTML = formatSchedule(event['Schedule']);
+
       const cta = document.getElementById('modal-cta');
-      cta.href = event['Booking URL'];
+      cta.href = event['Booking URL'] || '#';
       cta.textContent = event['CTA'] || 'Book now';
       document.getElementById('event-modal').classList.remove('hidden');
     }
@@ -151,12 +172,18 @@
       document.getElementById('event-modal').classList.add('hidden');
     });
 
+    document.getElementById('event-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'event-modal') {
+        document.getElementById('event-modal').classList.add('hidden');
+      }
+    });
+
     document.getElementById('search').addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase();
       const filtered = allEvents.filter(ev =>
-        ev['Event title'].toLowerCase().includes(query) ||
-        ev['Subject'].toLowerCase().includes(query) ||
-        ev['Summary'].toLowerCase().includes(query)
+        (ev['Event Title'] || '').toLowerCase().includes(query) ||
+        (ev['Subject'] || '').toLowerCase().includes(query) ||
+        (ev['Summary'] || '').toLowerCase().includes(query)
       );
       renderEvents(filtered);
     });
@@ -164,9 +191,13 @@
     Papa.parse(csvUrl, {
       download: true,
       header: true,
+      skipEmptyLines: true,
       complete: function(results) {
-        allEvents = results.data.filter(ev => ev['Live']?.toLowerCase() === 'yes');
+        allEvents = results.data.filter(ev => (ev['Live'] || '').toLowerCase().trim() === 'yes');
         renderEvents(allEvents);
+      },
+      error: function(err) {
+        console.error("PapaParse error:", err);
       }
     });
   </script>
