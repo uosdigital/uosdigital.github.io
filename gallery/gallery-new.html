@@ -101,6 +101,17 @@
       max-width: 80%;
     }
 
+    .arrow-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  fill: white;
+}
+
+.arrow.left .arrow-icon {
+  transform: scaleX(-1);
+}
+
+
     .arrow {
       position: absolute;
       top: 50%;
@@ -151,15 +162,23 @@
     <div class="badge">Gallery</div>
     <h2>Journalism facilities at Sheffield</h2>
     <p>See behind the scenes of our newsroom, broadcast facilities and podcast studios.</p>
-    <a>Browse all 6 images →</a>
+    <a>Browse all 6 images</a>
   </div>
 </div>
 </div>
 <div class="modal" id="galleryModal">
   <div class="close" onclick="closeModal()">✕</div>
-  <div class="arrow left" onclick="prevImage()">←</div>
+  <div class="arrow left" onclick="prevImage()">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="arrow-icon">
+    <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+  </svg>
+</div>
   <img id="modalImage" src="" alt="Gallery image">
-  <div class="arrow right" onclick="nextImage()">→</div>
+  <div class="arrow right" onclick="nextImage()">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="arrow-icon">
+    <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+  </svg>
+</div>
   <div class="modal-description" id="modalDescription"></div>
 </div>
 
