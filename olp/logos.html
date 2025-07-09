@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f6f6f6;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .logo-card {
+      background: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .logo-card img {
+      max-width: 100%;
+      height: 60px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    .logo-card p {
+      margin: 0;
+      font-size: 1rem;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo-grid">
+    <div class="logo-card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/BBC_logo_2021.svg" alt="BBC">
+      <p>BBC</p>
+    </div>
+    <div class="logo-card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/The_Guardian_2018.svg" alt="The Guardian">
+      <p>The Guardian</p>
+    </div>
+    <div class="logo-card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Puma_logo.svg/2560px-Puma_logo.svg.png" alt="Puma">
+      <p>Puma</p>
+    </div>
+    <div class="logo-card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Edelman_Logo.svg/2560px-Edelman_Logo.svg.png" alt="Edelman">
+      <p>Edelman</p>
+    </div>
+    <div class="logo-card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/LADbible_logo.png" alt="LADbible">
+      <p>LabBible</p>
+    </div>
+    <div class="logo-card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/1/1d/Penguin_Books_logo.svg" alt="Penguin Books">
+      <p>Penguin Books</p>
+    </div>
+  </div>
+
+</body>
+</html>
