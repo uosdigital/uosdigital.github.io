@@ -214,7 +214,7 @@
   text-decoration: none;
 }
 
-.testimonial:hover .testimonial-name {
+a.testimonial:hover .testimonial-name {
   text-decoration: underline;
   color: #440099;
 }
@@ -222,6 +222,10 @@
 /* Prevent underlines on all other content inside <a> */
 .testimonial *:not(.testimonial-name) {
   text-decoration: none !important;
+}
+
+a.testimonial .testimonial-name {
+text-decoration: underline;
 }
 
     </style>
@@ -237,13 +241,13 @@
                 <div class="testimonial-title">US Correspondent, Sky News</div>
                 <div class="testimonial-class">BA Journalism Studies</div>
           </a>
-              <a class="testimonial" href="https://www.sheffield.ac.uk">
+              <div class="testimonial" href="https://www.sheffield.ac.uk">
                 <img src="moir.jpg" alt="Person" class="testimonial-img">
                 <div class="testimonial-content">The single best thing would be the variety within it. It’s a great course for someone who’s keen to get a solid understanding of print, radio, TV, online and magazines and then go out and actually practise it during the degree.</div>
                 <div class="testimonial-name">Sam Moir</div>
                 <div class="testimonial-title">Senior Content Producer, Puma</div>
                 <div class="testimonial-class">BA Journalism Studies</div>
-              </a>
+              </div>
              <a class="testimonial" href="https://www.sheffield.ac.uk">
                 <div class="testimonial-content-plain">I think the practical elements of the course were the most useful for me. Being allocated a patch of the city to cover allowed me to experience real reporting for the first time, building up a contacts base and learning to recognise good news stories.</div>
                 <div class="testimonial-name">Martha Kelner</div>
