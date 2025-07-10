@@ -170,6 +170,24 @@
                 margin-right: 0; /* Remove gap on mobile view */
             }
         }
+
+        a.testimonial:hover {
+               cursor: pointer;
+        }
+
+        a.testimonial:hover .testimonial-name {
+  text-decoration: underline;
+  color: #440099;
+}
+
+/* Prevent underlines on all other content inside <a> */
+.testimonial *:not(.testimonial-name) {
+  text-decoration: none !important;
+}
+
+a.testimonial .testimonial-name {
+text-decoration: underline;
+}
     </style>
 </head>
 <body>
@@ -179,20 +197,20 @@
         <div class="testimonial-slider">
             <!-- Testimonial 1 -->
               <div class="testimonial-wrapper">
-            <div class="testimonial">
+            <a class="testimonial">
                 <img src="kelner.jpg" alt="Person" class="testimonial-img">
                 <div class="testimonial-content">I think the practical elements of the course were the most useful for me. Being allocated a patch of the city to cover allowed me to experience real reporting for the first time, building up a contacts base and learning to recognise good news stories.</div>
                 <div class="testimonial-name">Martha Kelner</div>
                 <div class="testimonial-title">US Correspondent, Sky News</div>
                 <div class="testimonial-class">BA Journalism Studies</div>
-            </div>
+            </a>
             </div>
             <!-- Testimonial 2 -->
              <div class="testimonial-wrapper">
             <div class="testimonial">
                 <img src="moir.jpg" alt="Person" class="testimonial-img">
                 <div class="testimonial-content">The single best thing would be the variety within it. It’s a great course for someone who’s keen to get a solid understanding of print, radio, TV, online and magazines and then go out and actually practise it during the degree.</div>
-                <div class="testimonial-name"><a href="https://www.sheffield.ac.uk">Sam Moir</a></div>
+                <div class="testimonial-name">Sam Moir</div>
                 <div class="testimonial-title">Senior Content Producer, Puma</div>
                 <div class="testimonial-class">BA Journalism Studies</div>
             </div>
