@@ -21,14 +21,14 @@
         h2 {
             font-family: 'source-serif-pro';
             font-weight: 700;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             margin-bottom: 0rem;
         }
 
          h3 {
             font-family: 'source-serif-pro';
             font-weight: 700;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             margin-bottom: 0rem;
         }
 
@@ -236,234 +236,22 @@
 
     .logo-card p {
       margin: 0;
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: #222;
     }
-  .progress-wrapper {
-      display: flex;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      gap: 0rem;
-    }
-
-    .progress-card {
-      width: 50%;
-      text-align: center;
-    }
-
-    .progress-container {
-      position: relative;
-      width: 180px;
-      height: 180px;
-      margin: 0 auto 1rem;
-    }
-
-    svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    circle {
-      fill: none;
-      stroke-width: 16;
-      stroke-linecap: round;
-    }
-
-    .progress-bg {
-      stroke: #eee9ff;
-    }
-
-    .progress-bar {
-      stroke: #6a4ded;
-      stroke-dasharray: 565.48;
-      stroke-dashoffset: 565.48;
-      transition: stroke-dashoffset 1.5s ease;
-    }
-
-    .progress-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 40px;
-      font-weight: bold;
-    }
-
-    .label {
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 5px;
-      text-wrap: balance  ;
-      line-height: 1.2;
-    }
-
-    .source {
-      font-size: 13px;
-      color: #555;
-      font-style: italic;
-    }
-
-    h2.salary {
-      margin-top: 0rem;
-        font-size: 2.4rem;
-    }
-
-     p.salary {
-      margin-bottom: 0rem;
-    
-    }
-
-    hr.grey {
-      border: 3px solid #d0d2d4;
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .video-scroll-section {
-  max-width: 1180px;
-  margin: 0 auto;
-  overflow-x: auto;
-}
-
-.scroll-container {
-  display: flex;
-  gap: 1rem;
-  scroll-snap-type: x mandatory;
-}
-
-.video-inner {
-  position: relative;
-  padding-bottom: 177.78%; /* 9:16 ratio */
-  height: 0;
-  overflow: hidden;
-}
-
-.video-inner iframe,
-.video-inner img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.video-placeholder {
-  background-color: black;
-  cursor: pointer;
-}
-
-.play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80px;
-  height: 80px;
-  transform: translate(-50%, -50%);
-  background: url('images/play-solid.svg') no-repeat center center;
-  background-size: contain;
-  border: none;
-  pointer-events: none;
-}
-
-.video-wrapper {
-  flex: 1 1 0;
-  scroll-snap-align: start;
-}
-
-.video-inner {
-  position: relative;
-  padding-bottom: 177.78%; /* 9:16 aspect ratio */
-  height: 0;
-  overflow: hidden;
-}
-
-.video-inner iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.slider-nav-container {
-  margin-bottom: 5rem;
-}
     </style>
 </head>
 <body>
     <div class="content-container">
-      <hr class="grey">
-        <h2>Careers and outcomes</h2>
+        <h2>Graduate careers</h2>
         <p>Our graduates go on to achieve great things and remain part of our legacy forever. They change the world through the power of storytelling - be they journalists, documentarians, PR experts, novelists or teachers.</p>
-        <p><strong>See what our graduates are upto now...</strong></p>
-        <div class="video-scroll-section">
-  <div class="scroll-container">
-
-    <div class="video-wrapper">
-      <div class="video-inner video-placeholder" data-aos="zoom-in" data-aos-delay="0"
-           data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_46zn0a1k"
-           onclick="loadVideo(this)">
-        <img src="tiknews.png" loading="lazy" />
-        <button class="play-button" aria-label="Play video"></button>
-      </div>
-    </div>
-
-    <div class="video-wrapper">
-      <div class="video-inner video-placeholder" data-aos="zoom-in" data-aos-delay="600"
-           data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_wtvvha2u&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_kcj094x4%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D"
-           onclick="loadVideo(this)">
-        <img src="tiksport.png" alt="Video thumbnail 2" loading="lazy" />
-        <button class="play-button" aria-label="Play video"></button>
-      </div>
-    </div>
-    <div class="video-wrapper">
-      <div class="video-inner video-placeholder" data-aos="zoom-in" data-aos-delay="600"
-           data-src="https://cdnapisec.kaltura.com/p/2103181/embedPlaykitJs/uiconf_id/53345422?iframeembed=true&entry_id=1_wtvvha2u&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_kcj094x4%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D"
-           onclick="loadVideo(this)">
-        <img src="tikskills.png" alt="Video thumbnail 2" loading="lazy" />
-        <button class="play-button" aria-label="Play video"></button>
-      </div>
-    </div>
-  </div>  
-</div>
-<hr class="grey">
         <h3>Graduate outcomes</h3>
         <p>Job prospects for BA Journalism Studies graduates:</p>
-<div class="progress-wrapper">
-  <!-- First Progress Bar -->
-  <div class="progress-card">
-    <div class="progress-container">
-      <svg viewBox="0 0 200 200">
-        <circle class="progress-bg" cx="100" cy="100" r="90" />
-        <circle class="progress-bar" cx="100" cy="100" r="90" data-value="94" />
-      </svg>
-      <div class="progress-text">0%</div>
-    </div>
-    <div class="label">Graduates in a skilled profession or further study</div>
-    <div class="source">Source: HESA Graduate Outcomes</div>
-  </div>
-
-  <!-- Second Progress Bar -->
-  <div class="progress-card">
-    <div class="progress-container">
-      <svg viewBox="0 0 200 200">
-        <circle class="progress-bg" cx="100" cy="100" r="90" />
-        <circle class="progress-bar" cx="100" cy="100" r="90" data-value="97" />
-      </svg>
-      <div class="progress-text">0%</div>
-    </div>
-    <div class="label">Graduate <br>employment rate</div>
-    <div class="source">Source: HESA Graduate Outcomes</div>
-  </div>
-</div>
-<hr class="grey">
-<p></p>
-<p class="salary">Average professional salary:</p>
-<h2 class="salary">£35,000</h2>
-<div class="source">Source: HESA Graduate Outcomes</div>
-<hr class="grey">
+        <ul>
+            <li>XX% in a skilled profession or further study</li>
+            <li>XX% graduate employment rate</li>
+            <li>£XX,XXX average professional salary</li>
+        </ul>
         <h3>Skills and experiences</h3>
         <p>This course will equip you with a range of skills and experiences that will help in your future career:</p>
         <ul>
@@ -478,7 +266,6 @@
           <li>Web publishing</li>
           <li>Social media</li>
          </ul>
-         <hr class="grey">
          <h3>Career paths</h3>
          <p>Recent graduates are now working as:</p>
          <ul>
@@ -517,8 +304,15 @@
       <p>Penguin Books</p>
     </div>
   </div>
-  <hr class="grey">
-         <h2>Careers support</h2>
+         <ul>
+         <li>BBC</li>
+         <li>The Guardian</li>
+         <li>Puma</li>
+         <li>Edelman</li>
+         <li>Lab Bible</li>
+         <li>Penguin Books</li>
+         </ul>
+         <h3>Careers support</h3>
          <p>Studying at Sheffield is more than just a qualification.</p>
          <p>We want all graduates to leave university with the skills and confidence they need for whatever future they want.</p>
          <p>Our <a href="https://www.sheffield.ac.uk/careers">Careers and Employability service</a> will help you with:</p>
@@ -530,19 +324,8 @@
             <li>Work experience</li>
             <li>Skills and personal development</li>
          </ul>
-           <hr class="grey">
-         <h2>Further study</h2>
-         <p>Other recent graduates have progressed to postgraduate courses in:</p>
-         <ul>
-          <li><a href="">Creative and Cultural Industries Management MSc</a></li>
-          <li><a href="">Digital Culture and Communication MA</a></li>
-          <li><a href="">Digital Media and Society MA</a></li>
-          <li><a href="">English Literature (Creative Writing) MA</a></li>
-          <li><a href="">Strategic Marketing and Branding MSc</a></li>
-         </ul>
-         <hr class="grey">
-         <h2>What our graduates say...</h2>
-         <p>Hear from our graduates how this course has helped them with their careers.</p>
+         <h2>What our graduates say</h2>
+         <p>Sint magna commodo dolor elit eu ipsum elit veniam ad.</p>
     </div>
        <div class="testimonial-slider-container" id="sliderContainer">
         <!-- Testimonial Slider Wrapper -->
@@ -645,35 +428,6 @@
   updateTestimonialWidth();
 </script>
 
-<script>
-  const bars = document.querySelectorAll('.progress-bar');
-  const radius = 90;
-  const circumference = 2 * Math.PI * radius;
 
-  bars.forEach((bar, index) => {
-    const container = bar.closest('.progress-container');
-    const text = container.querySelector('.progress-text');
-    const targetValue = parseInt(bar.dataset.value, 10);
-    bar.style.strokeDasharray = circumference;
-    bar.style.strokeDashoffset = circumference;
-
-    const duration = 1500;
-    const start = performance.now();
-
-    function animate(timestamp) {
-      const elapsed = timestamp - start;
-      const percent = Math.min(elapsed / duration, 1) * targetValue;
-      const offset = circumference * (1 - percent / 100);
-      bar.style.strokeDashoffset = offset;
-      text.textContent = `${Math.round(percent)}%`;
-
-      if (percent < targetValue) {
-        requestAnimationFrame(animate);
-      }
-    }
-
-    requestAnimationFrame(animate);
-  });
-</script>
 </body>
 </html>

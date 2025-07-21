@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radial Progress</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      text-align: center;
+      width: 320px;
+    }
+
+    .progress-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 20px;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible; /* ✅ prevents cropping */
+    }
+
+    circle {
+      fill: none;
+      stroke-width: 12; /* ✅ slightly smaller stroke */
+      stroke-linecap: round;
+    }
+
+    .progress-bg {
+      stroke: #eee9ff;
+    }
+
+    .progress-bar {
+      stroke: #6a4ded;
+      stroke-dasharray: 565.48;
+      stroke-dashoffset: 565.48;
+      transition: stroke-dashoffset 1.5s ease;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+    .label {
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .source {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #555;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="progress-container">
+    <svg viewBox="0 0 200 200">
+      <circle class="progress-bg" cx="100" cy="100" r="90" />
+      <circle class="progress-bar" cx="100" cy="100" r="90" />
+    </svg>
+    <div class="progress-text" id="progress-value">0%</div>
+  </div>
+  <div class="label">Graduates in a skilled<br>profession or further study</div>
+  <div class="source">Source: HESA Graduate Outcomes</div>
+</div>
+
+<script>
+  const value = 94;
+  const circle = document.querySelector('.progress-bar');
+  const text = document.getElementById('progress-value');
+  const radius = 90;
+  const circumference = 2 * Math.PI * radius;
+
+  function animateProgress() {
+    const duration = 1500;
+    const start = performance.now();
+
+    function update(timestamp) {
+      const elapsed = timestamp - start;
+      const percent = Math.min(elapsed / duration, 1) * value;
+      const offset = circumference * (1 - percent / 100);
+
+      circle.style.strokeDashoffset = offset;
+      text.textContent = `${Math.round(percent)}%`;
+
+      if (percent < value) {
+        requestAnimationFrame(update);
+      }
+    }
+
+    circle.style.strokeDasharray = circumference;
+    circle.style.strokeDashoffset = circumference;
+    requestAnimationFrame(update);
+  }
+
+  animateProgress();
+</script>
+
+</body>
+</html>
