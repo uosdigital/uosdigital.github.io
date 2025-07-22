@@ -15,8 +15,18 @@
   <script
     src="https://images-sra.group.shef.ac.uk/events/EventWidget.complete.js"
     data-container="#event-widget-container"
-    data-csv="https://images-sra.group.shef.ac.uk/events/tasters-new.csv"
-    data-category="spotlights">
+    data-csv="https://images-sra.group.shef.ac.uk/events/tasters-new.csv">
   </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const select = document.querySelector('.category-filter');
+    const target = 'spotlights';         // ← your slugified category
+    if (select) {
+      select.value = target;
+      // trigger the widget’s own change‐handler
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+</script>
 </body>
 </html>
