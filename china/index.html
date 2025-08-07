@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese University Entry Requirements</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="large-8">
+        <header>
+            <h1>Chinese University Entry Requirements</h1>
+            <p>The University of Sheffield entry requirements vary depending on the ranking of your institution.</p>
+        </header>
+
+        <main>
+            <div class="search-section" role="search" aria-label="University search">
+                <label for="university-search" class="sr-only">Search for Chinese universities</label>
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        id="university-search" 
+                        placeholder="Type your university in English or Chinese..."
+                        autocomplete="off"
+                        aria-describedby="search-help"
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        role="combobox"
+                        aria-autocomplete="list"
+                    >
+                    <button 
+                        type="button" 
+                        id="clear-search" 
+                        class="clear-button"
+                        aria-label="Clear search"
+                        tabindex="-1"
+                    >
+                        <span class="clear-icon">×</span>
+                    </button>
+                    <div 
+                        id="suggestions-dropdown" 
+                        class="suggestions-dropdown" 
+                        role="listbox"
+                        aria-label="University suggestions"
+                        hidden
+                    ></div>
+                </div>
+                <!-- <div id="search-help" class="search-help">
+                    Start typing to search universities. Use arrow keys to navigate suggestions.
+                </div> -->
+            </div>
+
+            <button id="search-button" class="search-button" type="button">
+                Search your university
+            </button>
+
+            <div id="no-results" class="no-results" hidden aria-live="polite">
+                <p>No universities found matching your search.</p>
+        <p>Please try different keywords or check your spelling.</p>
+            </div>
+
+            <div id="results" class="results" hidden aria-live="polite" aria-label="Search results">
+                <div class="result-card">
+                    <div class="university-header">
+                        <h2 id="university-name" class="university-name"></h2>
+                    </div>
+                    <div class="grade-section">
+                        <h3 class="grade-section-title">Grade Equivalents</h3>
+                        <div class="grade-info">
+                            <div class="grade-item">
+                                <h3 class="grade-label">UK 2:1 Equivalent</h3>
+                                <div id="grade-2-1" class="grade-value" aria-label="Grade equivalent to UK 2:1"></div>
+                            </div>
+                            <div class="grade-item">
+                                <h3 class="grade-label">UK 2:2 Equivalent</h3>
+                                <div id="grade-2-2" class="grade-value" aria-label="Grade equivalent to UK 2:2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="additional-info" class="additional-info">
+                        <h3 class="info-label">Additional Information</h3>
+                        <div id="info-content" class="info-content"></div>
+                        <a href="https://www.sheffield.ac.uk/postgraduate/english-language" target="_blank" rel="noopener noreferrer" id="cta-button" class="cta-button" hidden>
+                            Check English language requirements
+                            <span class="cta-arrow"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
