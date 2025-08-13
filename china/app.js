@@ -481,7 +481,7 @@ input[type="text"]:hover {
   }
 
   .grade-value {
-    font-size: 1.2em;
+    font-size: 1.4em;
   }
   
   .grade-item {
@@ -489,11 +489,19 @@ input[type="text"]:hover {
   }
   
   .university-name {
-    font-size: 1.2em;
+    font-size: 1.4em;
   }
   
   .university-name .chinese-name {
-    font-size: 0.8em;
+    font-size: 0.9em;
+  }
+  
+  .grade-section-title {
+    font-size: 1.3em;
+  }
+  
+  .info-label {
+    font-size: 1.3em;
   }
   
   .result-card {
@@ -520,15 +528,23 @@ input[type="text"]:hover {
   }
   
   .grade-value {
-    font-size: 1.1em;
+    font-size: 1.3em;
   }
 
   .university-name {
-    font-size: 1.1em;
+    font-size: 1.3em;
   }
   
   .university-name .chinese-name {
-    font-size: 0.75em;
+    font-size: 0.85em;
+  }
+  
+  .grade-section-title {
+    font-size: 1.2em;
+  }
+  
+  .info-label {
+    font-size: 1.2em;
   }
   
   .result-card {
