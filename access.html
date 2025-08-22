@@ -17,14 +17,31 @@
         </header>
 
         <main>
-   <iframe src="https://images-sra.group.shef.ac.uk/access/iframe.html" 
+   <iframe id="access-checker-iframe" 
+        src="https://images-sra.group.shef.ac.uk/access/iframe.html" 
         width="100%" 
-        height="800px" 
+        height="600px" 
         frameborder="0"
         title="Access+ Eligibility Checker">
 </iframe>
+
             <p>The University of Sheffield entry requirements vary depending on the ranking of your institution.</p>
         </main>
     </div>
+    <script>
+  // More sophisticated height management
+  let resizeTimeout;
+  
+  window.addEventListener('message', function(event) {
+    if (event.data.type === 'resize') {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const iframe = document.getElementById('access-checker-iframe');
+        const newHeight = Math.max(event.data.height, 400); // Minimum height
+        iframe.style.height = newHeight + 'px';
+      }, 50);
+    }
+  });
+</script>
 </body>
 </html>
