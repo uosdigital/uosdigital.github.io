@@ -923,13 +923,23 @@ class UniversitySearchWidget {
         const hasChineseChars = /[\u4e00-\u9fff]/.test(query);
         
         if (hasChineseChars) {
-            // Single Chinese character - return alphabetical results
+            // Single Chinese character - prioritize startsWith, then includes
             return this.universities.filter(university => {
                 const chineseName = university['Name of Institution (Chinese)'];
                 return chineseName.includes(query);
             }).sort((a, b) => {
-                // Sort by Chinese name alphabetically
-                return a['Name of Institution (Chinese)'].localeCompare(b['Name of Institution (Chinese)']);
+                const aChinese = a['Name of Institution (Chinese)'];
+                const bChinese = b['Name of Institution (Chinese)'];
+                
+                // First priority: startsWith vs includes
+                const aStartsWith = aChinese.startsWith(query);
+                const bStartsWith = bChinese.startsWith(query);
+                
+                if (aStartsWith && !bStartsWith) return -1;
+                if (!aStartsWith && bStartsWith) return 1;
+                
+                // Second priority: alphabetical by Chinese name
+                return aChinese.localeCompare(bChinese);
             });
         } else {
             // Single English letter - return alphabetical results
@@ -1075,7 +1085,7 @@ class UniversitySearchWidget {
         
         let highlightedText = text;
         words.forEach(word => {
-            if (word.length > 1) {
+            if (word.length >= 1) {
                 const regex = new RegExp(`(${this.escapeRegExp(word)})`, 'gi');
                 highlightedText = highlightedText.replace(regex, '<span class="match">$1</span>');
             }
