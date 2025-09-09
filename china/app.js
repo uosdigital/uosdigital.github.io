@@ -344,7 +344,7 @@ input[type="text"]:hover {
   transform: translateY(-1px);
 }
 
-.grade-label {
+h4.grade-label {
   font-size: 1em;
   font-weight: 600;
   color: #374151;
@@ -431,6 +431,9 @@ input[type="text"]:hover {
   font-size: 1em;
   color: #4b5563;
   line-height: 1.6;
+  word-wrap: break-word; /* Add word wrapping for long URLs */
+  overflow-wrap: break-word; /* Modern property for better word breaking */
+  hyphens: auto; /* Add hyphenation for better text flow */
 }
 
 .info-content:empty {
@@ -449,12 +452,15 @@ input[type="text"]:hover {
 .info-content li {
   margin-bottom: 0.25rem;
   line-height: 1.5;
+  word-wrap: break-word; /* Ensure list items wrap properly */
+  overflow-wrap: break-word;
 }
 
 .info-link {
   color: #440099;
   text-decoration: underline;
   transition: color 0.2s ease;
+  word-break: break-all; /* Break long URLs to prevent overflow */
 }
 
 .info-link:hover {
@@ -519,6 +525,17 @@ input[type="text"]:hover {
 }
 
 @media (max-width: 480px) {
+  body {
+    padding: 0.75em; 
+  }
+  
+  .university-header,
+  .grade-section,
+  .additional-info {
+    padding-left: 1.5rem; 
+    padding-right: 1.5rem;
+  }
+  
   h1 {
     font-size: 1.6em;
   }
@@ -596,6 +613,61 @@ input[type="text"]:hover {
 *:focus-visible {
   outline: 2px solid #007BFF;
   outline-offset: 2px;
+}
+
+/* Add more aggressive mobile optimizations */
+@media (max-width: 375px) {
+  body {
+    margin: 0.5em auto;
+    padding: 0.5em; 
+  }
+  
+  .university-header,
+  .grade-section,
+  .additional-info {
+    padding-left: 1.25rem; 
+    padding-right: 1.25rem;
+  }
+  
+  .grade-item {
+    padding: 0.75rem;
+  }
+  
+  .result-card {
+    margin-top: 0.5rem;
+  }
+  
+  h1 {
+    font-size: 1.4em;
+  }
+  
+  .university-name {
+    font-size: 1.2em;
+  }
+  
+  .grade-section-title,
+  .info-label {
+    font-size: 1.1em;
+  }
+}
+
+/* Improve touch targets */
+@media (max-width: 768px) {
+  .search-button {
+    min-height: 44px; /* Keep search button at 44px for accessibility */
+    padding: 12px 20px;
+  }
+  
+  .cta-button {
+    min-height: 36px; 
+    padding: 8px 16px;
+    font-size: 14px; 
+  }
+  
+  .suggestion-item {
+    min-height: 44px;
+    padding: 12px 15px;
+  }
 }
 `;
 
@@ -767,7 +839,7 @@ class UniversitySearchWidget {
         
         // Debounce search
         this.searchTimeout = setTimeout(() => {
-            if (query.length >= 2) {
+            if (query.length >= 1) {
                 this.search(query);
             } else {
                 this.hideSuggestions();
@@ -844,16 +916,21 @@ class UniversitySearchWidget {
             const englishName = university['Name of Institution (English)'].toLowerCase();
             const chineseName = university['Name of Institution (Chinese)'].toLowerCase();
             
-            return words.every(word => 
-                englishName.includes(word) || chineseName.includes(word)
-            );
+            return words.every((word, index) => {
+                // First word must start with the search term
+                if (index === 0) {
+                    return englishName.startsWith(word) || chineseName.startsWith(word);
+                }
+                // Subsequent words can be anywhere in the name
+                return englishName.includes(word) || chineseName.includes(word);
+            });
         }).sort((a, b) => {
             const aName = a['Name of Institution (English)'].toLowerCase();
             const bName = b['Name of Institution (English)'].toLowerCase();
             
             // Sort by relevance (exact matches first, then partial matches)
-            const aExact = aName.includes(normalizedQuery);
-            const bExact = bName.includes(normalizedQuery);
+            const aExact = aName.startsWith(normalizedQuery);
+            const bExact = bName.startsWith(normalizedQuery);
             
             if (aExact && !bExact) return -1;
             if (!aExact && bExact) return 1;
@@ -1116,7 +1193,7 @@ class UniversitySearchWidget {
             query = englishName;
         }
         
-        if (query.length >= 2) {
+        if (query.length >= 1) {
             // If we already have results displayed and the query hasn't changed, don't search again
             if (this.elements.results.hidden === false && this.lastSearchQuery === this.elements.searchInput.value.trim()) {
                 return;
