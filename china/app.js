@@ -910,29 +910,108 @@ class UniversitySearchWidget {
     
     fuzzySearch(query) {
         const normalizedQuery = query.toLowerCase().trim();
-        const words = normalizedQuery.split(/\s+/);
+        
+        // Special handling for single characters
+        if (normalizedQuery.length === 1) {
+            return this.handleSingleCharacterSearch(normalizedQuery);
+        }
+        
+        return this.handleMultiCharacterSearch(normalizedQuery);
+    }
+
+    handleSingleCharacterSearch(query) {
+        const hasChineseChars = /[\u4e00-\u9fff]/.test(query);
+        
+        if (hasChineseChars) {
+            // Single Chinese character - return alphabetical results
+            return this.universities.filter(university => {
+                const chineseName = university['Name of Institution (Chinese)'];
+                return chineseName.includes(query);
+            }).sort((a, b) => {
+                // Sort by Chinese name alphabetically
+                return a['Name of Institution (Chinese)'].localeCompare(b['Name of Institution (Chinese)']);
+            });
+        } else {
+            // Single English letter - return alphabetical results
+            return this.universities.filter(university => {
+                const englishName = university['Name of Institution (English)'].toLowerCase();
+                return englishName.startsWith(query);
+            }).sort((a, b) => {
+                // Sort by English name alphabetically
+                return a['Name of Institution (English)'].localeCompare(b['Name of Institution (English)']);
+            });
+        }
+    }
+
+    handleMultiCharacterSearch(query) {
+        const hasChineseChars = /[\u4e00-\u9fff]/.test(query);
         
         return this.universities.filter(university => {
             const englishName = university['Name of Institution (English)'].toLowerCase();
-            const chineseName = university['Name of Institution (Chinese)'].toLowerCase();
+            const chineseName = university['Name of Institution (Chinese)'];
             
-            // Now uses includes for all words
-            return words.every(word => 
-                englishName.includes(word) || chineseName.includes(word)
-            );
+            if (hasChineseChars) {
+                // For Chinese queries: direct character matching
+                return chineseName.includes(query);
+            } else {
+                // For English queries: word-based matching
+                const words = query.split(/\s+/);
+                return words.every(word => 
+                    englishName.includes(word) || chineseName.includes(word)
+                );
+            }
         }).sort((a, b) => {
-            const aName = a['Name of Institution (English)'].toLowerCase();
-            const bName = b['Name of Institution (English)'].toLowerCase();
+            const aEnglish = a['Name of Institution (English)'].toLowerCase();
+            const bEnglish = b['Name of Institution (English)'].toLowerCase();
+            const aChinese = a['Name of Institution (Chinese)'];
+            const bChinese = b['Name of Institution (Chinese)'];
             
-            // Sorting still prioritizes exact matches
-            const aExact = aName.includes(normalizedQuery);
-            const bExact = bName.includes(normalizedQuery);
+            const aScore = this.calculateRelevanceScore(aEnglish, aChinese, query);
+            const bScore = this.calculateRelevanceScore(bEnglish, bChinese, query);
             
-            if (aExact && !bExact) return -1;
-            if (!aExact && bExact) return 1;
+            if (aScore !== bScore) {
+                return bScore - aScore;
+            }
             
-            return aName.localeCompare(bName);
+            return aEnglish.localeCompare(bEnglish);
         });
+    }
+
+    calculateRelevanceScore(englishName, chineseName, query) {
+        let score = 0;
+        const hasChineseChars = /[\u4e00-\u9fff]/.test(query);
+        
+        if (hasChineseChars) {
+            if (chineseName.includes(query)) {
+                score += 100;
+                if (chineseName.startsWith(query)) {
+                    score += 50;
+                }
+            }
+            if (englishName.includes(query.toLowerCase())) {
+                score += 25;
+            }
+        } else {
+            const words = query.toLowerCase().split(/\s+/);
+            
+            words.forEach(word => {
+                if (englishName.includes(word)) {
+                    score += 50;
+                    if (englishName.startsWith(word)) {
+                        score += 25;
+                    }
+                }
+                if (chineseName.includes(word)) {
+                    score += 25;
+                }
+            });
+            
+            if (englishName.includes(query.toLowerCase())) {
+                score += 30;
+            }
+        }
+        
+        return score;
     }
     
     showSuggestions() {
