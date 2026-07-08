@@ -344,7 +344,7 @@ input[type="text"]:hover {
   transform: translateY(-1px);
 }
 
-.grade-label {
+h4.grade-label {
   font-size: 1em;
   font-weight: 600;
   color: #374151;
@@ -431,6 +431,9 @@ input[type="text"]:hover {
   font-size: 1em;
   color: #4b5563;
   line-height: 1.6;
+  word-wrap: break-word; /* Add word wrapping for long URLs */
+  overflow-wrap: break-word; /* Modern property for better word breaking */
+  hyphens: auto; /* Add hyphenation for better text flow */
 }
 
 .info-content:empty {
@@ -449,12 +452,15 @@ input[type="text"]:hover {
 .info-content li {
   margin-bottom: 0.25rem;
   line-height: 1.5;
+  word-wrap: break-word; /* Ensure list items wrap properly */
+  overflow-wrap: break-word;
 }
 
 .info-link {
   color: #440099;
   text-decoration: underline;
   transition: color 0.2s ease;
+  word-break: break-all; /* Break long URLs to prevent overflow */
 }
 
 .info-link:hover {
@@ -519,6 +525,17 @@ input[type="text"]:hover {
 }
 
 @media (max-width: 480px) {
+  body {
+    padding: 0.75em; 
+  }
+  
+  .university-header,
+  .grade-section,
+  .additional-info {
+    padding-left: 1.5rem; 
+    padding-right: 1.5rem;
+  }
+  
   h1 {
     font-size: 1.6em;
   }
@@ -596,6 +613,61 @@ input[type="text"]:hover {
 *:focus-visible {
   outline: 2px solid #007BFF;
   outline-offset: 2px;
+}
+
+/* Add more aggressive mobile optimizations */
+@media (max-width: 375px) {
+  body {
+    margin: 0.5em auto;
+    padding: 0.5em; 
+  }
+  
+  .university-header,
+  .grade-section,
+  .additional-info {
+    padding-left: 1.25rem; 
+    padding-right: 1.25rem;
+  }
+  
+  .grade-item {
+    padding: 0.75rem;
+  }
+  
+  .result-card {
+    margin-top: 0.5rem;
+  }
+  
+  h1 {
+    font-size: 1.4em;
+  }
+  
+  .university-name {
+    font-size: 1.2em;
+  }
+  
+  .grade-section-title,
+  .info-label {
+    font-size: 1.1em;
+  }
+}
+
+/* Improve touch targets */
+@media (max-width: 768px) {
+  .search-button {
+    min-height: 44px; /* Keep search button at 44px for accessibility */
+    padding: 12px 20px;
+  }
+  
+  .cta-button {
+    min-height: 36px; 
+    padding: 8px 16px;
+    font-size: 14px; 
+  }
+  
+  .suggestion-item {
+    min-height: 44px;
+    padding: 12px 15px;
+  }
 }
 `;
 
@@ -767,7 +839,7 @@ class UniversitySearchWidget {
         
         // Debounce search
         this.searchTimeout = setTimeout(() => {
-            if (query.length >= 2) {
+            if (query.length >= 1) {
                 this.search(query);
             } else {
                 this.hideSuggestions();
@@ -838,28 +910,118 @@ class UniversitySearchWidget {
     
     fuzzySearch(query) {
         const normalizedQuery = query.toLowerCase().trim();
-        const words = normalizedQuery.split(/\s+/);
+        
+        // Special handling for single characters
+        if (normalizedQuery.length === 1) {
+            return this.handleSingleCharacterSearch(normalizedQuery);
+        }
+        
+        return this.handleMultiCharacterSearch(normalizedQuery);
+    }
+
+    handleSingleCharacterSearch(query) {
+        const hasChineseChars = /[\u4e00-\u9fff]/.test(query);
+        
+        if (hasChineseChars) {
+            // Single Chinese character - prioritize startsWith, then includes
+            return this.universities.filter(university => {
+                const chineseName = university['Name of Institution (Chinese)'];
+                return chineseName.includes(query);
+            }).sort((a, b) => {
+                const aChinese = a['Name of Institution (Chinese)'];
+                const bChinese = b['Name of Institution (Chinese)'];
+                
+                // First priority: startsWith vs includes
+                const aStartsWith = aChinese.startsWith(query);
+                const bStartsWith = bChinese.startsWith(query);
+                
+                if (aStartsWith && !bStartsWith) return -1;
+                if (!aStartsWith && bStartsWith) return 1;
+                
+                // Second priority: alphabetical by Chinese name
+                return aChinese.localeCompare(bChinese);
+            });
+        } else {
+            // Single English letter - return alphabetical results
+            return this.universities.filter(university => {
+                const englishName = university['Name of Institution (English)'].toLowerCase();
+                return englishName.startsWith(query);
+            }).sort((a, b) => {
+                // Sort by English name alphabetically
+                return a['Name of Institution (English)'].localeCompare(b['Name of Institution (English)']);
+            });
+        }
+    }
+
+    handleMultiCharacterSearch(query) {
+        const hasChineseChars = /[\u4e00-\u9fff]/.test(query);
         
         return this.universities.filter(university => {
             const englishName = university['Name of Institution (English)'].toLowerCase();
-            const chineseName = university['Name of Institution (Chinese)'].toLowerCase();
+            const chineseName = university['Name of Institution (Chinese)'];
             
-            return words.every(word => 
-                englishName.includes(word) || chineseName.includes(word)
-            );
+            if (hasChineseChars) {
+                // For Chinese queries: direct character matching
+                return chineseName.includes(query);
+            } else {
+                // For English queries: word-based matching
+                const words = query.split(/\s+/);
+                return words.every(word => 
+                    englishName.includes(word) || chineseName.includes(word)
+                );
+            }
         }).sort((a, b) => {
-            const aName = a['Name of Institution (English)'].toLowerCase();
-            const bName = b['Name of Institution (English)'].toLowerCase();
+            const aEnglish = a['Name of Institution (English)'].toLowerCase();
+            const bEnglish = b['Name of Institution (English)'].toLowerCase();
+            const aChinese = a['Name of Institution (Chinese)'];
+            const bChinese = b['Name of Institution (Chinese)'];
             
-            // Sort by relevance (exact matches first, then partial matches)
-            const aExact = aName.includes(normalizedQuery);
-            const bExact = bName.includes(normalizedQuery);
+            const aScore = this.calculateRelevanceScore(aEnglish, aChinese, query);
+            const bScore = this.calculateRelevanceScore(bEnglish, bChinese, query);
             
-            if (aExact && !bExact) return -1;
-            if (!aExact && bExact) return 1;
+            if (aScore !== bScore) {
+                return bScore - aScore;
+            }
             
-            return aName.localeCompare(bName);
+            return aEnglish.localeCompare(bEnglish);
         });
+    }
+
+    calculateRelevanceScore(englishName, chineseName, query) {
+        let score = 0;
+        const hasChineseChars = /[\u4e00-\u9fff]/.test(query);
+        
+        if (hasChineseChars) {
+            if (chineseName.includes(query)) {
+                score += 100;
+                if (chineseName.startsWith(query)) {
+                    score += 50;
+                }
+            }
+            if (englishName.includes(query.toLowerCase())) {
+                score += 25;
+            }
+        } else {
+            const words = query.toLowerCase().split(/\s+/);
+            
+            words.forEach(word => {
+                if (englishName.includes(word)) {
+                    score += 50;
+                    if (englishName.startsWith(word)) {
+                        score += 25;
+                    }
+                }
+                if (chineseName.includes(word)) {
+                    score += 25;
+                }
+            });
+            
+            if (englishName.includes(query.toLowerCase())) {
+                score += 30;
+            }
+        }
+        
+        return score;
     }
     
     showSuggestions() {
@@ -923,7 +1085,7 @@ class UniversitySearchWidget {
         
         let highlightedText = text;
         words.forEach(word => {
-            if (word.length > 1) {
+            if (word.length >= 1) {
                 const regex = new RegExp(`(${this.escapeRegExp(word)})`, 'gi');
                 highlightedText = highlightedText.replace(regex, '<span class="match">$1</span>');
             }
@@ -1116,7 +1278,7 @@ class UniversitySearchWidget {
             query = englishName;
         }
         
-        if (query.length >= 2) {
+        if (query.length >= 1) {
             // If we already have results displayed and the query hasn't changed, don't search again
             if (this.elements.results.hidden === false && this.lastSearchQuery === this.elements.searchInput.value.trim()) {
                 return;
