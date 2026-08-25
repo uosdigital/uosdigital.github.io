@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>University of Sheffield | QS Consent Page</title>
+  <link rel="stylesheet" href="https://use.typekit.net/jou7rrz.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: source-sans-pro, Helvetica, sans-serif;
+      color: #111;
+      background: #f7f7f7;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 72px 24px 40px;
+    }
+
+    .card {
+      width: min(780px, calc(100vw - 48px));
+      min-height: 430px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow:
+        0 4px 17px rgba(0, 0, 0, 0.11),
+        0 1px 4px rgba(0, 0, 0, 0.06);
+      padding: 74px 48px 48px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo {
+      display: block;
+      width: 250px;
+      max-width: 72%;
+      height: auto;
+    }
+
+    .banner-placeholder {
+      width: 100%;
+      aspect-ratio: 3 / 1;
+      margin-top: 48px;
+      border: 2px dashed #b7b7b7;
+      background: #f1f1f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .intro-copy {
+      margin-top: 34px;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .intro-copy p {
+      margin: 0 0 22px;
+    }
+
+     .outro-copy {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .outro-copy p {
+      margin: 0 0 22px;
+    }
+
+    .form-area {
+      margin-top: 30px;
+    }
+
+.consent-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+  user-select: none;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: bold;
+}
+
+    .consent-row input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      margin: 0;
+      background: #fff;
+      border: 1.5px solid #8a8a8a;
+      border-radius: 3px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .consent-row input::after {
+      content: "";
+      width: 11px;
+      height: 6px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) scale(0);
+      transform-origin: center;
+      transition: transform 90ms ease;
+      margin-top: -2px;
+    }
+
+    .consent-row input:checked {
+      background: #440099;
+      border-color: #440099;
+    }
+
+    .consent-row input:checked::after {
+      transform: rotate(-45deg) scale(1);
+    }
+
+    .consent-row input:focus-visible {
+      outline: 3px solid #ffb81c;
+      outline-offset: 3px;
+    }
+
+    .submit-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 30px;
+      min-width: 180px;
+      height: 70px;
+      padding: 0 38px;
+      border: 0;
+      border-radius: 0;
+      background: #440099;
+      color: #fff;
+      font: 700 25px/1 Arial, Helvetica, sans-serif;
+      cursor: pointer;
+    }
+
+    .submit-button:hover {
+      background: #350078;
+    }
+
+    .submit-button:focus-visible {
+      outline: 4px solid #ffb81c;
+      outline-offset: 4px;
+    }
+
+    .status {
+      margin: 20px 0 0;
+      min-height: 1.3em;
+      font-size: 18px;
+      color: red;
+    }
+
+    .form-area {
+      text-align: center;
+    }
+
+.consent-row{
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding-top: 32px;
+      }
+
+      .card {
+        min-height: 0;
+        padding: 52px 30px 38px;
+      }
+
+      .logo {
+        max-width: 88%;
+      }
+
+      .banner-placeholder {
+        margin-top: 36px;
+      }
+
+      .intro-copy {
+        margin-top: 28px;
+        font-size: 18px;
+      }
+
+      .form-area {
+        margin-top: 24px;
+      }
+
+      .consent-row {
+        font-size: 20px;
+      }
+
+      .submit-button {
+        height: 58px;
+        min-width: 150px;
+        font-size: 21px;
+      }
+    }
+
+    .banner-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  margin-top: 1.5rem;
+}
+
+  hr.grey {
+      margin-bottom: 1rem;
+      background-color: lightgray;
+      border: none;
+      height: 5px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" aria-labelledby="page-title">
+    <h1 id="page-title" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+      University of Sheffield communications consent
+    </h1>
+
+    <div class="logo-wrap">
+      <img
+        class="logo" src="logo.png" alt="University of Sheffield">
+    </div>
+
+   
+
+    <div class="intro-copy">
+      <p>
+       If you’re sure you do not wish for us to share your details with QS or no longer want to receive QS related emails from us, please tick below:
+</p>
+    </div>
+
+    <form id="consentForm" class="form-area">
+      <label class="consent-row">
+        <input id="communications" name="communications" type="checkbox">
+        <span>Unsubscribe</span>
+      </label>
+
+      <button class="submit-button" type="submit">Submit</button>
+      <p id="status" class="status" aria-live="polite"></p>
+    </form>
+    <div class="outro-copy">
+      <p>
+          You can keep up to date with The University of Sheffield on <a href="https://www.linkedin.com/school/university-of-sheffield/">LinkedIn</a> and our <a href="https://sheffield.ac.uk/ambition">website.</a>
+      </p>
+    </div>
+    <hr class="grey" />
+     <img class="banner-image"  src="qstop.jpg" alt="">
+  </main>
+
+  <script>
+    const form = document.getElementById('consentForm');
+    const checkbox = document.getElementById('communications');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (checkbox.checked) {
+        window.location.href = 'qs-consent-cloud-unsubscribe-confirm.html';
+      } else {
+        status.textContent = 'Please tick the box before submitting.';
+      }
+    });
+  </script>
+</body>
+</html>
