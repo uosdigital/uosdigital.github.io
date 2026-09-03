@@ -1,0 +1,1347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://use.typekit.net/qto1kjw.css">
+  <link href="favicon.ico" rel="icon" sizes="any"/>
+  <title>Policy content type – prototype</title>
+  <style>
+    :root{
+      --ink:#111111;
+      --muted:#565656;
+      --border:#d8d8d8;
+      --soft:#f3f3f3;
+      --brand:#440099;
+      --brand-dark:#2f006c;
+      --white:#ffffff;
+      --max:1280px;
+      --content:780px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:#fff;
+      font-family:source-sans-3, sans-serif;
+      font-size:18px;
+      line-height:1.62;
+    }
+
+    a{
+      color:var(--brand);
+      text-decoration-thickness:1px;
+      text-underline-offset:.14em;
+    }
+    a:hover{color:var(--brand-dark);text-decoration-thickness:2px}
+    a:focus-visible, button:focus-visible, input:focus-visible{
+      outline:3px solid #ffdd00;
+      outline-offset:3px;
+    }
+
+    .skip-link{
+      position:absolute;
+      left:-9999px;
+      top:0;
+      z-index:1000;
+      padding:.75rem 1rem;
+      background:#111;
+      color:#fff;
+    }
+    .skip-link:focus{left:1rem;top:1rem}
+
+    .site-header{background:#fff}
+    .header-shell{
+      width:min(calc(100% - 40px), 1280px);
+      margin-inline:auto;
+    }
+
+    /* Top utility/search strip */
+    .utility-bar{background:#29343d;color:#fff}
+    .utility-bar .header-shell{
+      height:56px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .utility-left{display:flex;align-items:center;height:100%;gap:2.6rem}
+    .utility-link{
+      color:#fff;text-decoration:none;font-size:20px;line-height:1;
+      display:flex;align-items:center;gap:.9rem;height:100%;
+    }
+    .utility-link:hover{color:#fff;text-decoration:underline}
+    .home-icon{width:27px;height:24px;position:relative;display:inline-block;flex:none}
+    .home-icon::before{
+      content:"";position:absolute;left:4px;top:8px;width:18px;height:15px;
+      background:#fff;border-radius:1px;
+    }
+    .home-icon::after{
+      content:"";position:absolute;left:3px;top:1px;width:18px;height:18px;
+      border-left:4px solid #fff;border-top:4px solid #fff;transform:rotate(45deg);
+    }
+    .home-icon span{position:absolute;z-index:2;left:11px;bottom:0;width:6px;height:10px;background:#29343d}
+
+    .utility-search{height:54px;display:flex;margin-left:auto}
+    .utility-search label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+    .utility-search input{
+      width:294px;height:54px;border:0;padding:0 18px;background:#fff;color:#333;
+      font:400 22px/1.1 source-sans-3, sans-serif;
+    }
+    .utility-search button{
+      width:62px;height:54px;border:0;background:#7900ff;display:grid;place-items:center;cursor:pointer;
+    }
+    .mag-icon{width:22px;height:22px;border:4px solid #fff;border-radius:50%;position:relative}
+    .mag-icon::after{content:"";position:absolute;width:11px;height:4px;background:#fff;right:-9px;bottom:-5px;transform:rotate(45deg);border-radius:2px}
+
+    /* White logo + global navigation */
+    .identity-row{background:#f7f7f8}
+    .identity-row .header-shell{
+      height:157px;display:flex;align-items:center;justify-content:space-between;
+    }
+    .uos-logo{
+      display:flex;align-items:center;gap:14px;color:#4700a8;text-decoration:none;
+      min-width:380px;
+    }
+    .uos-logo:hover{color:#4700a8;text-decoration:none}
+    .uos-shield{width:86px;height:103px;flex:none;color:#4700a8}
+    .uos-wordmark{
+      font-family:source-serif-4, serif;font-weight:700;color:#4700a8;
+      font-size:43px;line-height:.96;letter-spacing:-1.5px;
+    }
+    .global-nav{align-self:stretch;display:flex;align-items:center}
+    .global-nav__list{display:flex;align-items:center;gap:72px;list-style:none;margin:0;padding:0}
+    .global-nav__link{
+      display:flex;align-items:center;gap:11px;color:#202a34;text-decoration:none;
+      font:400 23px/1.1 source-sans-3, sans-serif;white-space:nowrap;
+    }
+    .global-nav__link:hover{color:#202a34;text-decoration:underline}
+    .chevron{
+      width:10px;height:10px;border-right:4px solid #4700a8;border-bottom:4px solid #4700a8;
+      transform:rotate(45deg) translateY(-2px);flex:none;
+    }
+
+    /* Purple section title */
+    .section-title-bar{background:#4b00aa;color:#fff}
+    .section-title-bar .header-shell{height:96px;display:flex;align-items:center}
+    .section-title-bar a{
+      color:#fff;
+      text-decoration:none;
+      font-family:source-serif-4, serif;
+      font-weight:700;
+      font-size:28px;
+      line-height:1;
+    }
+    .section-title-bar a:hover{color:#fff;text-decoration:underline}
+
+    /* Dark-purple local navigation */
+    .local-nav{background:#25105d;color:#fff}
+    .local-nav .header-shell{height:62px;display:flex;align-items:center;overflow:hidden}
+    .local-nav__list{
+      list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:55px;height:100%;
+    }
+    .local-nav__list li{display:flex;align-items:center;height:100%}
+    .local-nav__list a{
+      color:#fff;text-decoration:none;font:400 20px/1.1 source-sans-3, sans-serif;
+      display:flex;align-items:center;gap:10px;white-space:nowrap;height:100%;
+    }
+    .local-nav__list a:hover{color:#fff;text-decoration:underline}
+    .local-nav .chevron{width:9px;height:9px;border-width:0 3px 3px 0;border-style:solid;border-color:#fff;transform:rotate(45deg) translateY(-2px)}
+    .menu-toggle{display:none}
+
+    @media(max-width:1100px){
+      .global-nav__list{gap:28px}
+      .global-nav__link{font-size:19px}
+      .uos-wordmark{font-size:34px}.uos-shield{width:70px;height:84px}.uos-logo{min-width:310px}
+      .local-nav__list{gap:30px}.local-nav__list a{font-size:17px}
+    }
+    @media(max-width:800px){
+      .header-shell{width:min(calc(100% - 28px),1280px)}
+      .utility-left{gap:1.4rem}.utility-link{font-size:16px}
+      .utility-search input{width:180px;font-size:17px}
+      .identity-row .header-shell{height:105px}
+      .uos-shield{width:54px;height:65px}.uos-wordmark{font-size:27px}.uos-logo{min-width:0}
+      .global-nav__list{display:none}.menu-toggle{display:block;border:2px solid #202a34;background:transparent;padding:.55rem .75rem;font-weight:700}
+      .section-title-bar .header-shell{height:72px}.section-title-bar a{font-size:28px}
+      .local-nav .header-shell{overflow-x:auto}.local-nav__list{gap:30px}.local-nav__list a{font-size:16px}
+    }
+    @media(max-width:560px){
+      .utility-link span.label{display:none}.utility-left{gap:0}
+      .utility-search input{width:150px}
+      .uos-wordmark{font-size:23px}.uos-shield{width:48px;height:58px}
+      .section-title-bar a{font-size:28px}
+    }
+
+    main{
+      width:100%;
+      margin:0;
+    }
+
+    .page-intro{
+      width:min(calc(100% - 80px), var(--max));
+      margin-inline:auto;
+      background:#fff;
+    }
+    .page-intro__inner{
+      width:100%;
+      margin:0;
+      padding:30px 0 20px;
+    }
+
+    .breadcrumbs{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:0;
+      margin:0;
+      padding:0;
+      color:#58616a;
+      font-size:18px;
+      line-height:1.4;
+    }
+    .breadcrumbs a{
+      color:#58616a;
+      text-decoration:none;
+      border-bottom:2px solid #6b737a;
+      padding-bottom:2px;
+    }
+    .breadcrumbs a:hover{
+      color:#303942;
+      border-bottom-color:#303942;
+    }
+    .breadcrumbs__sep{
+      margin:0 12px;
+      color:#58616a;
+      font-weight:700;
+      text-decoration:none;
+    }
+    .breadcrumbs [aria-current="page"]{
+      color:#555d65;
+      font-weight:700;
+    }
+
+    .hero{
+      max-width:none;
+      padding:0 0 42px;
+    }
+    h1,h2,h3{
+      font-family:source-serif-4, serif;
+      line-height:1.12;
+      letter-spacing:-.02em;
+    }
+    h1{
+      margin:0;
+      max-width:900px;
+      color:#27323c;
+      font-size:clamp(42px, 4vw, 58px);
+      line-height:1.08;
+      font-weight:700;
+      letter-spacing:-1px;
+    }
+    .standfirst{
+      max-width:1050px;
+      margin:22px 0 0;
+      color:#303a44;
+      font-size:clamp(21px, 2vw, 27px);
+      line-height:1.55;
+      font-weight:400;
+      letter-spacing:0;
+    }
+
+    .policy-layout{
+      width:min(calc(100% - 80px), var(--max));
+      margin-inline:auto;
+      display:grid;
+      grid-template-columns:minmax(0,var(--content)) minmax(220px,1fr);
+      gap:clamp(3rem,7vw,7rem);
+      align-items:start;
+      padding-top:0;
+      padding-bottom:5rem;
+    }
+
+    .policy-section{
+      padding:0 0 2rem;
+      margin:0 0 2.2rem;
+      border-bottom:1px solid var(--border);
+    }
+    .policy-section h2{
+      margin:0 0 1.2rem;
+      font-size:clamp(1.65rem,3vw,2.2rem);
+    }
+    .policy-section p{margin:0 0 1rem}
+    .policy-section ul{
+      margin:.5rem 0 1rem;
+      padding-left:1.4rem;
+    }
+    .policy-section li{margin:.4rem 0}
+
+    .toc{
+      position:sticky;
+      top:1.5rem;
+      margin-top:0;
+      border-top:5px solid var(--brand);
+      padding-top:1rem;
+      font-size:.9rem;
+      align-self:start;
+    }
+    .toc h2{
+      margin:.1rem 0 .7rem;
+      font:700 1rem/1.3 source-sans-3, sans-serif;
+    }
+    .toc ol{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .toc li{border-top:1px solid var(--border)}
+    .toc a{
+      display:block;
+      padding:.65rem 0;
+      color:#222;
+      text-decoration:none;
+    }
+    .toc a:hover{color:var(--brand)}
+
+    .doc-control{
+      background:var(--soft);
+      padding:1.5rem 1.6rem;
+      border-left:5px solid var(--brand);
+      margin-top:.5rem;
+    }
+    .doc-control h2{margin-top:0}
+    .doc-control dl{
+      display:grid;
+      grid-template-columns:150px 1fr;
+      gap:.55rem 1rem;
+      margin:0;
+      font-size:.95rem;
+    }
+    .doc-control dt{font-weight:700}
+    .doc-control dd{margin:0}
+
+    .promo{
+      background:#ece8f4;
+      margin-top:1rem;
+    }
+    .promo__inner{
+      width:min(calc(100% - 40px), var(--max));
+      margin-inline:auto;
+      min-height:280px;
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      align-items:stretch;
+    }
+    .promo__copy{
+      padding:3.2rem 3rem 3.2rem 0;
+      align-self:center;
+    }
+    .promo h2{
+      margin:0 0 1rem;
+      font-size:2.2rem;
+    }
+    .button{
+      display:inline-block;
+      margin-top:.5rem;
+      padding:.72rem 1.1rem;
+      background:var(--brand);
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+    }
+    .promo__image{
+      background:
+        linear-gradient(135deg, rgba(68,0,153,.15), rgba(68,0,153,.02)),
+        repeating-linear-gradient(90deg,#ddd 0,#ddd 40px,#eee 40px,#eee 80px);
+      min-height:280px;
+      position:relative;
+      overflow:hidden;
+    }
+    .promo__image::before,
+    .promo__image::after{
+      content:"";
+      position:absolute;
+      background:#fff;
+      opacity:.8;
+      transform:rotate(-12deg);
+    }
+    .promo__image::before{width:130%;height:38px;left:-10%;top:70px}
+    .promo__image::after{width:130%;height:58px;left:-10%;bottom:55px}
+
+    footer{
+      background:#111;
+      color:#fff;
+      padding:3rem 0;
+    }
+    .footer__inner{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:2rem;
+      font-size:.9rem;
+    }
+    footer h2{
+      font:700 1rem/1.3 source-sans-3, sans-serif;
+      margin-top:0;
+    }
+    footer a{color:#fff}
+
+
+    @media(max-width:900px){
+      .policy-layout{width:min(calc(100% - 40px), var(--max))}
+    }
+
+    @media (max-width:900px){
+      .policy-layout{grid-template-columns:1fr}
+      .toc{
+        position:static;
+        order:-1;
+        border:1px solid var(--border);
+        border-top:5px solid var(--brand);
+        padding:1rem 1.2rem;
+      }
+      .promo__inner{grid-template-columns:1fr}
+      .promo__copy{padding:2.5rem 0}
+      .promo__image{min-height:220px}
+    }
+
+    @media (max-width:620px){
+      body{font-size:16px}
+      main,.promo__inner,.footer__inner{width:min(calc(100% - 28px), var(--max))}
+      .page-intro{width:min(calc(100% - 28px), var(--max))}
+      .page-intro__inner{padding:22px 0 18px}
+      .breadcrumbs{font-size:15px;margin-bottom:0}
+      .breadcrumbs__sep{margin:0 8px}
+      h1{font-size:clamp(36px,10vw,46px)}
+      .standfirst{font-size:20px;line-height:1.5;margin-top:18px}
+      .doc-control dl{grid-template-columns:1fr}
+      .doc-control dd{margin-bottom:.4rem}
+      .footer__inner{grid-template-columns:1fr}
+    }
+  
+    /* Sheffield typography */
+    .local-nav a,
+    .section-nav a{
+      font-family:source-sans-3, sans-serif;
+      font-weight:400;
+      font-size:16.2px;
+    }
+
+    .breadcrumbs,
+    .breadcrumbs a,
+    .breadcrumbs [aria-current="page"]{
+      font-family:source-sans-3, sans-serif;
+      font-weight:400;
+      font-size:15.3px;
+    }
+    .breadcrumbs [aria-current="page"]{
+      font-weight:700;
+    }
+
+    .hero h1{
+      font-family:source-serif-4, serif;
+      font-weight:700;
+      font-size:36px;
+      line-height:1.15;
+      letter-spacing:0;
+    }
+
+    .hero .standfirst{
+      font-family:source-sans-3, sans-serif;
+      font-weight:200;
+      font-size:21.6px;
+      line-height:1.5;
+      letter-spacing:0;
+    }
+
+  
+    .study-title,
+    .study-header,
+    .section-title,
+    .study-band__title{
+      font-family:source-serif-4, serif;
+      font-weight:700;
+      font-size:28px;
+    }
+
+  
+    /* Header sizing refinements */
+    .section-title-bar .header-shell{
+      height:80px;
+      min-height:80px;
+    }
+
+    .global-nav a,
+    .masthead__actions a{
+      font-size:18px;
+    }
+
+  
+    /* Policy section heading size */
+    .policy-section h2,
+    .doc-control h2{
+      font-size:25.2px;
+    }
+
+  
+    /* Core body typography */
+    body{
+      font-family:source-sans-3, sans-serif;
+      font-size:18px;
+    }
+
+    p,
+    li,
+    dd,
+    dt{
+      font-family:source-sans-3, sans-serif;
+      font-size:18px;
+    }
+
+    /* Content dividers */
+    .intro-divider{
+      border:5px solid #d0d2d4;
+      background-color:#d0d2d4;
+      margin:36px 0;
+    }
+
+    hr{
+      border:0;
+      border-top:1px solid #d0d2d4;
+      margin:32px 0;
+    }
+
+    .policy-section{
+      border-bottom:1px solid #d0d2d4;
+    }
+
+  
+    /* Explicit visible policy dividers */
+    .intro-divider{
+      display:block;
+      width:100%;
+      height:0;
+      border:0;
+      border-top:5px solid #d0d2d4;
+      margin:36px 0;
+    }
+
+    .section-divider{
+      display:block;
+      width:100%;
+      height:0;
+      border:0;
+      border-top:1px solid #d0d2d4;
+      margin:0 0 36px;
+    }
+
+    .policy-section{
+      border-bottom:0;
+    }
+
+  
+    /* Content spacing refinements */
+    .section-divider{
+      border-top-width:2px;
+    }
+
+    .policy-section p{
+      margin-top:0;
+      margin-bottom:0.65rem;
+    }
+
+    .policy-section p + p{
+      margin-top:0.65rem;
+    }
+
+    .policy-section ul{
+      margin-top:0.35rem;
+      margin-bottom:0.65rem;
+    }
+
+  
+    /* Tighten vertical content spacing */
+    .hero{
+      padding:0;
+    }
+
+    .policy-section{
+      padding:0;
+    }
+
+  
+    /* Main policy content background */
+    main{
+      background:#F8F8F9;
+    }
+
+    .page-intro{
+      background:transparent;
+    }
+
+    /* Sheffield-style side navigation card */
+    .toc{
+      position:sticky;
+      top:24px;
+      background:#fff;
+      border:0;
+      border-top:10px solid #7f00ff;
+      padding:42px 42px 46px;
+      font-family:source-sans-3, sans-serif;
+    }
+
+    .toc h2{
+      margin:0 0 30px;
+      font-family:source-serif-4, serif;
+      font-size:25.2px;
+      line-height:1.15;
+      font-weight:700;
+    }
+
+    .toc ol{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+
+    .toc li{
+      border:0;
+      margin:0;
+    }
+
+    .toc a{
+      display:block;
+      padding:9px 0;
+      color:#111;
+      font-family:source-sans-3, sans-serif;
+      font-size:18px;
+      line-height:1.45;
+      font-weight:400;
+      text-decoration:none;
+    }
+.toc a:hover,
+    .toc a:focus{
+      color:#440099;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+  
+    .toc h2{
+      margin:0;
+    }
+
+  
+    /* Policy version history */
+    .policy-history{
+      margin-top:28px;
+      padding-top:24px;
+      border-top:2px solid #d0d2d4;
+    }
+
+    .policy-history p{
+      margin:0 0 .65rem;
+    }
+
+    .history-toggle{
+      appearance:none;
+      border:0;
+      background:none;
+      padding:0;
+      color:#440099;
+      font:inherit;
+      font-weight:700;
+      text-decoration:underline;
+      text-underline-offset:3px;
+      cursor:pointer;
+    }
+
+    .history-toggle:hover{
+      text-decoration-thickness:2px;
+    }
+
+    .history-toggle:focus-visible{
+      outline:3px solid #ffdd00;
+      outline-offset:3px;
+    }
+
+    .history-list{
+      margin:20px 0 0;
+      padding-left:28px;
+    }
+
+    .history-list li{
+      margin:0 0 18px;
+      padding-left:6px;
+    }
+
+    .history-list strong{
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .history-list[hidden]{
+      display:none;
+    }
+
+  
+    /* Mobile policy navigation */
+    .toc__toggle{
+      display:none;
+    }
+
+    .simple-footer{
+      min-height:96px;
+      background:#111;
+      padding:0;
+    }
+
+    .simple-footer__inner{
+      width:min(calc(100% - 40px), var(--max));
+      min-height:96px;
+      margin-inline:auto;
+    }
+
+    @media (max-width: 620px){
+      .toc{
+        position:static;
+        padding:0;
+        border-top:6px solid #7f00ff;
+        background:#fff;
+      }
+
+      .toc__heading{
+        display:none;
+      }
+
+      .toc__toggle{
+        width:100%;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:1rem;
+        padding:18px 20px;
+        border:0;
+        background:#fff;
+        color:#111;
+        font-family:source-serif-4, serif;
+        font-size:22px;
+        line-height:1.2;
+        font-weight:700;
+        text-align:left;
+        cursor:pointer;
+      }
+
+      .toc__toggle:hover{
+        background:#f3f3f3;
+      }
+
+      .toc__chevron{
+        font-family:source-sans-3, sans-serif;
+        font-size:24px;
+        line-height:1;
+        transition:transform .2s ease;
+      }
+
+      .toc__toggle[aria-expanded="true"] .toc__chevron{
+        transform:rotate(180deg);
+      }
+
+      .toc ol{
+        display:none;
+        padding:0 20px 16px;
+      }
+
+      .toc ol.is-open{
+        display:block;
+      }
+
+      .toc a{
+        padding:10px 0;
+        font-size:17px;
+      }
+
+      .simple-footer,
+      .simple-footer__inner{
+        min-height:72px;
+      }
+    }
+
+  
+    @media (max-width: 620px){
+      .policy-layout{
+        display:grid;
+        grid-template-columns:1fr;
+      }
+
+      .policy-layout > article{
+        display:contents;
+      }
+
+      .policy-layout .hero{
+        order:1;
+      }
+
+      .policy-layout .toc{
+        order:2;
+        margin:0 0 28px;
+      }
+
+      .policy-layout .intro-divider{
+        order:3;
+      }
+
+      .policy-layout .policy-section,
+      .policy-layout .section-divider,
+      .policy-layout .doc-control{
+        order:4;
+      }
+    }
+
+    /* Canonical typography — Adobe Fonts kit qzw1huu */
+    html,
+    body,
+    button,
+    input,
+    textarea,
+    select{
+      font-family:source-sans-3, sans-serif;
+    }
+
+    body,
+    p,
+    li,
+    dt,
+    dd,
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    .utility-link,
+    .global-nav__link,
+    .local-nav__list a,
+    .breadcrumbs,
+    .breadcrumbs a,
+    .toc,
+    .toc a,
+    .history-toggle{
+      font-family:source-sans-3, sans-serif;
+      font-style:normal;
+    }
+
+     .header-shell img {
+      max-width: 280px;
+    }
+
+    h1,
+    h2,
+    h3,
+    .uos-wordmark,
+    .section-title-bar a,
+    .hero h1,
+    .policy-section h2,
+    .doc-control h2,
+    .toc h2,
+    .toc__toggle{
+      font-family:source-serif-4, serif;
+      font-style:normal;
+    }
+
+    .hero .standfirst{
+      font-family:source-sans-3, sans-serif;
+      font-style:normal;
+      font-weight:200;
+      font-size:21.6px;
+      line-height:1.5;
+      letter-spacing:0;
+    }
+
+    .global-nav__link,
+    .local-nav__list a,
+    .breadcrumbs,
+    .toc a{
+      font-weight:400;
+    }
+
+    .section-title-bar a,
+    .hero h1,
+    .policy-section h2,
+    .doc-control h2,
+    .toc h2,
+    .toc__toggle,
+    .uos-wordmark{
+      font-weight:700;
+    }
+
+    .breadcrumbs [aria-current="page"],
+    .history-toggle{
+      font-weight:700;
+    }
+
+  
+    /* Adobe Fonts jou7rrz typography fix */
+    .hero .standfirst{
+      font-family:source-sans-3, sans-serif;
+      font-style:normal;
+      font-weight:200;
+    }
+
+  
+    /* In this policy spacing */
+    .toc h2{
+      margin:0 0 1rem;
+    }
+
+    .toc a{
+      padding:6px 0;
+      line-height:1.35;
+    }
+
+    @media (max-width:620px){
+      .toc__toggle{
+        margin:0;
+      }
+
+      .toc ol{
+        padding-top:0;
+      }
+
+      .toc a{
+        padding:7px 0;
+        line-height:1.35;
+      }
+    }
+
+  
+    @media (max-width:620px){
+      /* Breadcrumbs are not needed in the compact mobile layout */
+      .page-intro{
+        display:none;
+      }
+
+      /* Remove vertical section spacing on mobile */
+      .policy-section,
+      .doc-control{
+        margin-top:0;
+        margin-bottom:0;
+      }
+    }
+
+  
+    @media (max-width:620px){
+      .intro-divider{
+        margin:24px 0;
+      }
+
+      .section-divider{
+        margin:0 0 20px;
+      }
+
+      .policy-section{
+        padding:0;
+        margin:0;
+      }
+
+      .policy-section h2{
+        margin-top:0;
+        margin-bottom:12px;
+      }
+
+      .policy-section p{
+        margin-top:0;
+        margin-bottom:.55rem;
+      }
+
+      .policy-section ul,
+      .policy-section ol{
+        margin-top:.35rem;
+        margin-bottom:.55rem;
+      }
+
+      .doc-control{
+        padding:0;
+        margin:0;
+      }
+    }
+
+  
+    @media (max-width:620px){
+      /* Remove the large desktop column gap when the layout collapses */
+      .policy-layout{
+        gap:0;
+      }
+
+      /* Give document control content breathing room from the purple rule */
+      .doc-control{
+        padding-left:1rem;
+      }
+
+         .header-shell img {
+      max-width: 200px;
+    }
+    }
+
+  
+    @media (max-width:620px){
+      /* Restore a modest rhythm between policy sections */
+      .section-divider{
+        margin:12px 0 20px;
+      }
+
+      /* Give the title/standfirst room below the mobile site navigation */
+      .hero{
+        padding-top:24px;
+      }
+
+      /* Small separation before the document control panel */
+      .doc-control{
+        margin-top:16px;
+      }
+    }
+
+  
+    @media (max-width:620px){
+      /* More breathing room between the purple document-control rule and its content */
+      .doc-control{
+        padding-top:16px;
+      }
+    }
+
+   
+
+  
+    /* Active "In this policy" item */
+    .toc a.is-active,
+    .toc a[aria-current="location"]{
+      font-weight:700;
+      color:#111;
+    }
+
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="utility-bar">
+    <div class="header-shell">
+      <div class="utility-left">
+        <a class="utility-link" href="#" aria-label="University home">
+          <span class="home-icon" aria-hidden="true"><span></span></span>
+        </a>
+        <a class="utility-link" href="#"><span class="label">Log in to MUSE</span></a>
+      </div>
+      <form class="utility-search" action="#" role="search">
+        <label for="site-search-input">Search our site</label>
+        <input id="site-search-input" type="search" placeholder="Search our site">
+        <button type="submit" aria-label="Search"><span class="mag-icon" aria-hidden="true"></span></button>
+      </form>
+    </div>
+  </div>
+
+  <div class="identity-row">
+    <div class="header-shell">
+      <a class="uos-logo" href="#" aria-label="University of Sheffield home">
+        <img src="logo.png">
+      </a>
+
+      <nav class="global-nav" aria-label="Global navigation">
+        <ul class="global-nav__list">
+          <li><a class="global-nav__link" href="#">Study <span class="chevron" aria-hidden="true"></span></a></li>
+          <li><a class="global-nav__link" href="#">Research <span class="chevron" aria-hidden="true"></span></a></li>
+          <li><a class="global-nav__link" href="#">Collaborate <span class="chevron" aria-hidden="true"></span></a></li>
+          <li><a class="global-nav__link" href="#">About <span class="chevron" aria-hidden="true"></span></a></li>
+        </ul>
+        <button class="menu-toggle" type="button">Menu</button>
+      </nav>
+    </div>
+  </div>
+
+  <div class="section-title-bar">
+    <div class="header-shell"><a href="#">Policies</a></div>
+  </div>
+
+  <nav class="local-nav" aria-label="Study at Sheffield navigation">
+    <div class="header-shell">
+      <ul class="local-nav__list">
+        <li><a href="#">Undergraduate policies <span class="chevron" aria-hidden="true"></span></a></li>
+        <li><a href="#">Postgraduate policies <span class="chevron" aria-hidden="true"></span></a></li>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="page-intro">
+    <div class="page-intro__inner">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="#">Home</a>
+        <span class="breadcrumbs__sep" aria-hidden="true">›</span>
+        <a href="#">Policies</a>
+        <span class="breadcrumbs__sep" aria-hidden="true">›</span>
+        <span aria-current="page">Leave of absence policy</span>
+      </nav>
+    </div>
+  </section>
+
+  <div class="policy-layout">
+    <article>
+      <header class="hero">
+        <h1>Leave of absence policy</h1>
+        <p class="standfirst">This policy sets out how students on taught programmes can take a break from their studies and how this is managed by the University.</p>
+        <hr class="intro-divider">
+      </header>
+      <section class="policy-section" id="purpose">
+        <h2>1. Purpose</h2>
+        <p>Students may sometimes need to take a break from their studies because of health, personal or other circumstances. This section explains the purpose of the policy and the framework used to manage leave of absence.</p>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="definition">
+        <h2>2. Definition</h2>
+        <p><strong>2.1</strong> A leave of absence is an approved break from a taught programme for a specified period.</p>
+        <p><strong>2.2</strong> During the approved period, normal academic requirements are paused and the student temporarily steps away from their programme.</p>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="scope">
+        <h2>3. Scope</h2>
+        <p><strong>3.1</strong> The policy applies to undergraduate and taught postgraduate students, subject to the exceptions and specific requirements set out below.</p>
+        <ul>
+          <li>Short-term absence may be covered by separate attendance guidance.</li>
+          <li>Postgraduate research students use separate leave-of-absence guidance.</li>
+          <li>Additional requirements can apply to sponsored, apprenticeship or professionally regulated programmes.</li>
+        </ul>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="principles">
+        <h2>4. Principles</h2>
+        <p>The University aims to support requests where possible while considering the student's circumstances, academic progress and any practical implications of taking a break.</p>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="duration">
+        <h2>5. Duration of leave of absence</h2>
+        <p>A request would normally cover no more than one academic year. Further or exceptional periods may require additional approval.</p>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="implications">
+        <h2>6. Key implications for students</h2>
+        <p>Before applying, students should consider how a break may affect areas such as:</p>
+        <ul>
+          <li>tuition fees and student finance</li>
+          <li>immigration and visa status</li>
+          <li>student accommodation</li>
+          <li>programme structure and assessment</li>
+        </ul>
+        <p><a href="#">Read the related student guidance</a> for practical advice and sources of support.</p>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="procedure">
+        <h2>7. Procedure for requesting and approval</h2>
+        <p>Students should first discuss their circumstances with their school, review the implications, and then follow the University's application process.</p>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="status">
+        <h2>8. Status and access to University services</h2>
+        <p>Students on leave are not normally expected to study or undertake assessment. Access to some University services may continue while other services are restricted.</p>
+      </section>
+      <hr class="section-divider">
+
+      <section class="policy-section" id="returning">
+        <h2>9. Returning from a leave of absence</h2>
+        <p>Ahead of the planned return date, students receive guidance about re-registration and any requirements they need to meet before resuming study.</p>
+      </section>
+
+      <section class="doc-control" id="document-control">
+        <h2>Document control</h2>
+        <dl>
+          <dt>Policy category</dt><dd>Education</dd>
+          <dt>Policy owner</dt><dd>Head of Academic Programmes Office</dd>
+          <dt>Approved by</dt><dd>Senate</dd>
+          <dt>Approval date</dt><dd>25 June 2025</dd>
+          <dt>Version</dt><dd>V1.4</dd>
+        </dl>
+
+        <div class="policy-history">
+          <p>First published 4 April 2024</p>
+          <p>
+            Last updated 25 June 2025 —
+            <button class="history-toggle" type="button"
+                    aria-expanded="false"
+                    aria-controls="policy-history-list">
+              Show all updates
+            </button>
+          </p>
+
+          <ol class="history-list" id="policy-history-list" hidden>
+            <li>
+              <strong>V1.4 - 2 June 2025</strong>
+              Updated definition of leave of absence
+            </li>
+            <li>
+              <strong>V1.3 - 9 April 2025</strong>
+              Changed policy owner document control field
+            </li>
+            <li>
+              <strong>V1.2 - 8 October 2024</strong>
+              Added link to related student guidance
+            </li>
+            <li>
+              <strong>V1.1 - 10 July 2024</strong>
+              Corrected typo in Scope section
+            </li>
+            <li>
+              <strong>V1.0 - 4 April 2024</strong>
+              First published.
+            </li>
+          </ol>
+        </div>
+      </section>
+    </article>
+
+    <aside class="toc" aria-label="On this page">
+      <h2 class="toc__heading">In this policy:</h2>
+      <button class="toc__toggle" type="button"
+              aria-expanded="false"
+              aria-controls="policy-toc-list">
+        <span>In this policy:</span>
+        <span class="toc__chevron" aria-hidden="true">⌄</span>
+      </button>
+      <ol id="policy-toc-list">
+        <li><a href="#purpose">1. Purpose</a></li>
+        <li><a href="#definition">2. Definition</a></li>
+        <li><a href="#scope">3. Scope</a></li>
+        <li><a href="#principles">4. Principles</a></li>
+        <li><a href="#duration">5. Duration</a></li>
+        <li><a href="#implications">6. Key implications</a></li>
+        <li><a href="#procedure">7. Procedure</a></li>
+        <li><a href="#status">8. Status and services</a></li>
+        <li><a href="#returning">9. Returning</a></li>
+        <li><a href="#document-control">Document control</a></li>
+      </ol>
+    </aside>
+  </div>
+</main>
+
+
+<footer class="simple-footer" aria-label="Site footer">
+  <div class="simple-footer__inner"></div>
+</footer>
+
+
+<script>
+  const historyToggle = document.querySelector('.history-toggle');
+  const historyList = document.getElementById('policy-history-list');
+
+  if (historyToggle && historyList) {
+    historyToggle.addEventListener('click', () => {
+      const isExpanded = historyToggle.getAttribute('aria-expanded') === 'true';
+      historyToggle.setAttribute('aria-expanded', String(!isExpanded));
+      historyList.hidden = isExpanded;
+      historyToggle.textContent = isExpanded ? 'Show all updates' : 'Hide all updates';
+    });
+  }
+</script>
+
+
+<script>
+  const tocToggle = document.querySelector('.toc__toggle');
+  const tocList = document.getElementById('policy-toc-list');
+
+  if (tocToggle && tocList) {
+    const setTocState = (open) => {
+      tocToggle.setAttribute('aria-expanded', String(open));
+      tocList.classList.toggle('is-open', open);
+    };
+
+    tocToggle.addEventListener('click', () => {
+      const open = tocToggle.getAttribute('aria-expanded') !== 'true';
+      setTocState(open);
+    });
+
+    tocList.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 620px)').matches) {
+          setTocState(false);
+        }
+      });
+    });
+  }
+</script>
+
+
+<script>
+  (() => {
+    const tocLinks = Array.from(document.querySelectorAll('#policy-toc-list a[href^="#"]'));
+    if (!tocLinks.length) return;
+
+    const sections = tocLinks
+      .map(link => {
+        const id = link.getAttribute('href').slice(1);
+        const section = document.getElementById(id);
+        return section ? { link, section } : null;
+      })
+      .filter(Boolean);
+
+    const setActiveLink = (activeLink) => {
+      tocLinks.forEach(link => {
+        const isActive = link === activeLink;
+        link.classList.toggle('is-active', isActive);
+
+        if (isActive) {
+          link.setAttribute('aria-current', 'location');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    const updateActiveFromScroll = () => {
+      const marker = Math.min(220, window.innerHeight * 0.32);
+      let active = sections[0];
+
+      for (const item of sections) {
+        if (item.section.getBoundingClientRect().top <= marker) {
+          active = item;
+        } else {
+          break;
+        }
+      }
+
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        active = sections[sections.length - 1];
+      }
+
+      if (active) setActiveLink(active.link);
+    };
+
+    tocLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        setActiveLink(link);
+      });
+    });
+
+    let ticking = false;
+    const requestUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateActiveFromScroll();
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', requestUpdate, { passive:true });
+    window.addEventListener('resize', requestUpdate);
+    window.addEventListener('load', updateActiveFromScroll);
+
+    updateActiveFromScroll();
+  })();
+</script>
+
+</body>
+</html>
