@@ -53,7 +53,7 @@
 .prototype-combined-header>.muse-bar .muse-search input::placeholder{color:#ffffffe6}
 .prototype-combined-header>.muse-bar .muse-search button{height:38px;width:44px;background:transparent;font-size:19px}
 .prototype-combined-header>.muse-bar .muse-search button:hover{background:#ffffff24}
-@media(max-width:600px){.prototype-combined-header>.muse-bar .muse-inner{padding-block:4px 14px}.prototype-combined-header>.muse-bar .muse-search{width:100%}.prototype-combined-header>.muse-bar .muse-search input[type=search],.prototype-combined-header>.muse-bar .muse-search button{height:44px}}
+@media(max-width:600px){.prototype-combined-header>.muse-bar .muse-inner{flex-wrap:nowrap;align-items:center;gap:12px;padding-block:4px}.prototype-combined-header>.muse-bar .muse-links{flex:1 1 auto;min-width:0;gap:12px}.prototype-combined-header>.muse-bar .muse-login{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.prototype-combined-header>.muse-bar .muse-search{width:auto;flex:none;background:transparent;border:0}.prototype-combined-header>.muse-bar .muse-search input[type=search]{width:0;min-width:0;height:44px;padding:0;border:0;opacity:0}.prototype-combined-header>.muse-bar .muse-search button{height:44px;width:44px}.prototype-combined-header>.muse-bar .muse-search.is-open{flex:1 1 auto;min-width:0;background:var(--on-dark-soft,#ffffff12);border:1px solid var(--on-dark-border,#ffffff66)}.prototype-combined-header>.muse-bar .muse-search.is-open input[type=search]{width:100%;padding:8px 12px;opacity:1}}
 .prototype-combined-header .global-navigation{background:transparent;--accent:var(--white)}
 .prototype-combined-header .gn-inner{max-width:1180px;min-height:124px}
 .prototype-combined-header .gn-home{width:260px}
@@ -93,7 +93,7 @@
 .uos img.ranking-icon{display:block;width:auto;height:92px;max-width:100%;margin:0 auto 18px;object-fit:contain}
 .textbox .ranking-icon+h2{margin-top:0}
 .prototype-combined-header>.muse-bar{position:relative}
-.prototype-combined-header>.muse-bar .muse-inner{border-bottom:0;padding-bottom:22px}
+.prototype-combined-header>.muse-bar .muse-inner{border-bottom:0}@media(min-width:601px){.prototype-combined-header>.muse-bar .muse-inner{padding-bottom:22px}}
 .prototype-combined-header>.muse-bar::after{content:"";position:absolute;left:max(12px,calc((100% - 1180px) / 2 - 48px));right:max(12px,calc((100% - 1180px) / 2 - 48px));bottom:0;height:1px;background:#ffffff33;pointer-events:none}
 .gn-toggle{display:none}
 .gn-toggle-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -172,4 +172,29 @@ document.querySelector('.course-form')?.addEventListener('submit',function(e){e.
  });
  update();
 })(document);
-</script><script>document.querySelectorAll(".gn-toggle").forEach((button)=>{const nav=button.closest(".global-navigation");const label=button.querySelector(".gn-toggle-label");button.addEventListener("click",()=>{const open=nav.classList.toggle("is-open");button.setAttribute("aria-expanded",open?"true":"false");if(label)label.textContent=open?"Close menu":"Menu"})});</script></body></html>
+</script><script>document.querySelectorAll(".gn-toggle").forEach((button)=>{const nav=button.closest(".global-navigation");const label=button.querySelector(".gn-toggle-label");button.addEventListener("click",()=>{const open=nav.classList.toggle("is-open");button.setAttribute("aria-expanded",open?"true":"false");if(label)label.textContent=open?"Close menu":"Menu"})});</script><script>
+(function(){
+  var form=document.querySelector(".prototype-combined-header .muse-search");
+  if(!form) return;
+  var button=form.querySelector("button");
+  var input=form.querySelector("input[type=search]");
+  var mq=window.matchMedia("(max-width:600px)");
+  function sync(){
+    if(!mq.matches){
+      form.classList.remove("is-open");
+      button.removeAttribute("aria-expanded");
+    }else if(!button.hasAttribute("aria-expanded")){
+      button.setAttribute("aria-expanded","false");
+    }
+  }
+  button.addEventListener("click",function(e){
+    if(!mq.matches||form.classList.contains("is-open")) return;
+    e.preventDefault();
+    form.classList.add("is-open");
+    button.setAttribute("aria-expanded","true");
+    input.focus();
+  });
+  if(mq.addEventListener) mq.addEventListener("change",sync);
+  sync();
+})();
+</script></body></html>
