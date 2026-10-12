@@ -53,7 +53,7 @@
 .prototype-combined-header .gn-home{width:260px}
 .prototype-combined-header .gn-menu>summary,.prototype-combined-header .gn-menu>summary .fa-icon,.prototype-combined-header .gn-menu[open]>summary{color:var(--white)}
 .prototype-combined-header .gn-menu>summary:hover{text-decoration:underline;text-underline-offset:6px}
-.prototype-combined-header .gn-panel{--accent:var(--brand-violet);border-top:4px solid var(--brand-violet)}
+.prototype-combined-header .gn-panel{--accent:var(--brand-violet);border-top:0;background:var(--light-violet);border-radius:8px}@media(min-width:768px){.prototype-combined-header .gn-panel{left:50%;right:auto;width:min(1260px,calc(100% + 80px),calc(100vw - 32px));transform:translateX(-50%)}}
 .prototype-combined-header .homepage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:clamp(28px,5vw,72px);width:calc(100% - 48px);max-width:1180px;margin:auto;padding:40px 0 64px;background:transparent;color:var(--white)}
 .prototype-combined-header .homepage>img{grid-area:auto;order:2;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;align-self:center;min-width:0}
 .prototype-combined-header .homepage .content{grid-area:auto;order:1;width:100%;max-width:none;margin:0;padding:0;min-width:0}
@@ -73,8 +73,8 @@
 @media(max-width:600px){.site-footer .footer-inner{width:calc(100% - 40px)}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.footer-extras{gap:20px}.footer-awards{gap:20px}.footer-awards img{width:85px;height:65px}.footer-awards a:nth-child(2) img{width:105px}.footer-social{gap:4px}.footer-legal ul{gap:12px 20px}.site-footer h2{font-size:22px}}
 @media(max-width:360px){.footer-links{grid-template-columns:1fr}}
 
-.motion-home{position:relative;isolation:isolate;background:transparent;--motion-x:0vw;--motion-y:0vh;--motion-turn:0deg;--motion-violet-strength:1;--motion-mint-strength:.35}
-.motion-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:var(--white);clip-path:inset(var(--motion-clip-top,0px) 0 var(--motion-clip-bottom,0px) 0)}.motion-wash{position:absolute;inset:0}
+.motion-home{position:relative;isolation:isolate;overflow:clip;background:transparent;--motion-x:0vw;--motion-y:0vh;--motion-turn:0deg;--motion-violet-strength:1;--motion-mint-strength:.35}
+html{background:var(--dark-violet)}html,body{overscroll-behavior-y:none}.motion-backdrop{position:sticky;top:0;z-index:-1;height:100vh;height:100lvh;margin-bottom:-100vh;margin-bottom:-100lvh;overflow:hidden;pointer-events:none;background:var(--white)}.motion-wash{position:absolute;inset:0}
 .motion-cloud{position:absolute;inset:-35%;will-change:transform;transform-origin:50% 50%}
 .motion-cloud-one{opacity:var(--motion-violet-strength);background:radial-gradient(ellipse 55% 44% at 68% 33%,color-mix(in srgb,var(--brand-violet) 56%,transparent) 0%,color-mix(in srgb,var(--brand-violet) 32%,transparent) 30%,transparent 74%);transform:translate(var(--motion-x),var(--motion-y)) rotate(var(--motion-turn))}
 .motion-cloud-two{opacity:var(--motion-mint-strength);background:radial-gradient(ellipse 40% 52% at 23% 65%,color-mix(in srgb,var(--peach) 45%,transparent) 0%,color-mix(in srgb,var(--peach) 25%,transparent) 42%,transparent 76%);transform:translate(calc(var(--motion-x) * -.7),calc(var(--motion-y) * -.5)) rotate(calc(var(--motion-turn) * -.8))}
@@ -172,14 +172,8 @@ document.querySelector('.course-form')?.addEventListener('submit',function(e){e.
   host.style.setProperty('--motion-y',(-12+Math.cos(p*Math.PI*2.6)*12).toFixed(3)+'vh');
   host.style.setProperty('--motion-turn',(p*125).toFixed(3)+'deg');
  };
- const clip=()=>{
-  const rect=host.getBoundingClientRect();
-  host.style.setProperty('--motion-clip-top',Math.max(0,rect.top).toFixed(1)+'px');
-  host.style.setProperty('--motion-clip-bottom',Math.max(0,win.innerHeight-rect.bottom-12).toFixed(1)+'px');
- };
  const frame=()=>{raf=0;current+=(target-current)*.09;paint(current);if(Math.abs(target-current)>.0001)raf=win.requestAnimationFrame(frame)};
  const update=()=>{
-  clip();
   if(reduced.matches){if(raf)win.cancelAnimationFrame(raf);raf=0;current=target=0;paint(0);return}
   const rect=host.getBoundingClientRect();
   target=clamp(Math.max(0,-rect.top)/Math.max(1,host.offsetHeight-win.innerHeight));

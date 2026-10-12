@@ -73,7 +73,7 @@
 .prototype-combined-header .gn-home{width:260px}
 .prototype-combined-header .gn-menu>summary,.prototype-combined-header .gn-menu>summary .fa-icon,.prototype-combined-header .gn-menu[open]>summary{color:var(--white)}
 .prototype-combined-header .gn-menu>summary:hover{text-decoration:underline;text-underline-offset:6px}
-.prototype-combined-header .gn-panel{--accent:var(--brand-violet);border-top:4px solid var(--brand-violet)}
+.prototype-combined-header .gn-panel{--accent:var(--brand-violet);border-top:0;background:var(--light-violet);border-radius:8px}@media(min-width:768px){.prototype-combined-header .gn-panel{left:50%;right:auto;width:min(1260px,calc(100% + 80px),calc(100vw - 32px));transform:translateX(-50%)}}
 .prototype-combined-header :is(.homepage,.campaign-banner){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:clamp(28px,5vw,72px);width:calc(100% - 48px);max-width:1180px;margin:auto;padding:40px 0 64px;background:transparent;color:var(--white)}
 .prototype-combined-header :is(.homepage>img,.campaign-photo){grid-area:auto;order:2;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;align-self:center;min-width:0}
 .prototype-combined-header :is(.homepage .content,.campaign-content){grid-area:auto;order:1;width:100%;max-width:none;margin:0;padding:0;min-width:0}
@@ -126,8 +126,8 @@ document.querySelector('.course-form')?.addEventListener('submit',function(e){e.
     const panel=menu._lnPanel;
     if(!panel)return;
     const bar=menu.closest('.ln-menu-bar');
-    if(mobile&&menu.open){if(panel.parentElement!==bar)bar.appendChild(panel)}
-    else if(panel.parentElement!==menu)menu.appendChild(panel);
+    if(mobile&&menu.open){panel.hidden=false;if(panel.parentElement!==bar)bar.appendChild(panel)}
+    else{if(panel.parentElement!==menu)menu.appendChild(panel);panel.hidden=!menu.open}
    });
   };
   const closeAll=()=>menus.forEach(menu=>{menu.open=false});
@@ -166,7 +166,13 @@ document.querySelector('.course-form')?.addEventListener('submit',function(e){e.
     if(!mobileQuery.matches)return;
     event.preventDefault();
     event.stopPropagation();
-    if(handled||dragged){handled=false;dragged=false;return}
+    if(handled||dragged){
+     const stay=menu.open;
+     handled=false;
+     dragged=false;
+     root.defaultView.setTimeout(()=>{menu.open=stay},0);
+     return;
+    }
     suppressOutside=true;
     keep(!menu.open);
     root.defaultView.setTimeout(()=>{suppressOutside=false},450);
