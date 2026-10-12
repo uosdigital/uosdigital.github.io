@@ -210,7 +210,8 @@ document.querySelector('.course-form')?.addEventListener('submit',function(e){e.
   var mq=window.matchMedia("(max-width:600px)");
   function close(){
     if(modal.open) modal.close();
-    button.setAttribute("aria-expanded","false");
+    if(mq.matches) button.setAttribute("aria-expanded","false");
+    else button.removeAttribute("aria-expanded");
   }
   function sync(){
     if(!mq.matches){
@@ -233,7 +234,7 @@ document.querySelector('.course-form')?.addEventListener('submit',function(e){e.
   modal.querySelector(".muse-search-close").addEventListener("click",close);
   modal.querySelector("form").addEventListener("submit",function(){if(modal.open) modal.close()});
   modal.addEventListener("click",function(e){if(e.target===modal) close()});
-  modal.addEventListener("close",function(){button.setAttribute("aria-expanded","false");button.focus()});
+  modal.addEventListener("close",function(){if(!mq.matches){button.removeAttribute("aria-expanded");return;}button.setAttribute("aria-expanded","false");button.focus()});
   if(mq.addEventListener) mq.addEventListener("change",sync);
   sync();
 })();

@@ -78,7 +78,7 @@
 .prototype-combined-header>.muse-bar .muse-search input::placeholder{color:var(--on-dark-text)}
 .prototype-combined-header>.muse-bar .muse-search button{height:38px;width:44px;background:transparent;font-size:19px}
 .prototype-combined-header>.muse-bar .muse-search button:hover{background:var(--on-dark-hover)}
-@media(max-width:600px){.prototype-combined-header>.muse-bar .muse-inner{padding-block:4px 14px}.prototype-combined-header>.muse-bar .muse-search{width:100%}.prototype-combined-header>.muse-bar .muse-search input[type=search],.prototype-combined-header>.muse-bar .muse-search button{height:44px}}
+@media(max-width:600px){.prototype-combined-header>.muse-bar .muse-inner{flex-wrap:nowrap;align-items:center;gap:12px;padding-block:4px}.prototype-combined-header>.muse-bar .muse-links{flex:1 1 auto;min-width:0;gap:12px}.prototype-combined-header>.muse-bar .muse-login{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.prototype-combined-header>.muse-bar .muse-search{width:auto;flex:none;background:transparent;border:0}.prototype-combined-header>.muse-bar .muse-search input[type=search]{width:0;min-width:0;height:44px;padding:0;border:0;opacity:0}.prototype-combined-header>.muse-bar .muse-search button{height:44px;width:44px}}.muse-search-modal{position:fixed;inset:72px 16px auto;width:min(520px,calc(100% - 32px));margin-inline:auto;padding:56px 20px 20px;border:0;border-radius:12px;background:var(--light-violet);color:var(--charcoal);box-shadow:0 18px 48px rgba(var(--prototype-dark-rgb),.28)}.muse-search-modal::backdrop{background:rgba(var(--prototype-dark-rgb),.72)}.muse-search-modal form{display:grid;gap:14px}.muse-search-modal label{font-family:var(--heading-font);font-weight:var(--heading-weight);font-size:24px;line-height:1.3}.muse-search-row{display:flex;gap:8px}.muse-search-modal input[type=search]{flex:1;min-width:0;height:48px;padding:8px 14px;border:1px solid color-mix(in srgb,var(--charcoal) 28%,var(--white));border-radius:4px;background:var(--white);color:var(--charcoal);font:var(--body-weight) 16px/1.4 var(--body-font)}.muse-search-modal button[type=submit]{flex:none;height:48px;padding:0 18px;border:0;border-radius:4px;background:var(--brand-violet);color:var(--white);font:var(--emphasis-weight) 16px/1 var(--body-font);cursor:pointer}.muse-search-close{position:absolute;top:8px;right:8px;display:grid;place-items:center;width:44px;height:44px;border:0;background:transparent;color:var(--charcoal);font-size:32px;line-height:1;cursor:pointer}.muse-search-modal :focus-visible{outline:2px solid var(--focus,#FD0);outline-offset:2px}
 .prototype-combined-header .global-navigation{background:transparent;--accent:var(--white)}
 .prototype-combined-header .gn-inner{max-width:1180px;min-height:124px}
 .prototype-combined-header .gn-home{width:260px}
@@ -145,4 +145,55 @@ document.querySelector('.course-form')?.addEventListener('submit',function(e){e.
  align();
  const observer=new win.ResizeObserver(align);observer.observe(header);observer.observe(search);
  root.fonts?.ready.then(align);win.addEventListener('resize',align);win.addEventListener('pagehide',()=>observer.disconnect(),{once:true});
-})(document);</script><script>document.querySelectorAll(".gn-toggle").forEach((button)=>{const nav=button.closest(".global-navigation");const label=button.querySelector(".gn-toggle-label");button.addEventListener("click",()=>{const open=nav.classList.toggle("is-open");button.setAttribute("aria-expanded",open?"true":"false");if(label)label.textContent=open?"Close menu":"Menu"})});</script></body></html>
+})(document);</script><script>document.querySelectorAll(".gn-toggle").forEach((button)=>{const nav=button.closest(".global-navigation");const label=button.querySelector(".gn-toggle-label");button.addEventListener("click",()=>{const open=nav.classList.toggle("is-open");button.setAttribute("aria-expanded",open?"true":"false");if(label)label.textContent=open?"Close menu":"Menu"})});</script>
+<dialog class="muse-search-modal" id="muse-search-modal" aria-label="Search the University website">
+  <button type="button" class="muse-search-close" aria-label="Close search"><span aria-hidden="true">&times;</span></button>
+  <form role="search" action="https://sheffield.ac.uk/find" method="get" target="_blank" rel="noopener noreferrer">
+    <label for="muse-search-query">Search our site</label>
+    <div class="muse-search-row">
+      <input id="muse-search-query" type="search" name="query" placeholder="Search our site" required>
+      <input type="hidden" name="f.Tabs|AllDocumentsFill" value="All results">
+      <button type="submit">Search</button>
+    </div>
+  </form>
+</dialog>
+<script>
+(function(){
+  var form=document.querySelector(".prototype-combined-header .muse-search")||document.querySelector(".staff-search-row form");
+  var modal=document.querySelector(".muse-search-modal");
+  if(!form||!modal) return;
+  var button=form.querySelector("button");
+  var field=modal.querySelector("input[type=search]");
+  var mq=window.matchMedia("(max-width:600px)");
+  function close(){
+    if(modal.open) modal.close();
+    if(mq.matches) button.setAttribute("aria-expanded","false");
+    else button.removeAttribute("aria-expanded");
+  }
+  function sync(){
+    if(!mq.matches){
+      form.classList.remove("is-open");
+      close();
+      button.removeAttribute("aria-expanded");
+    }else if(!button.hasAttribute("aria-expanded")){
+      button.setAttribute("aria-expanded","false");
+    }
+  }
+  button.setAttribute("aria-controls","muse-search-modal");
+  button.addEventListener("click",function(e){
+    if(!mq.matches) return;
+    e.preventDefault();
+    if(typeof modal.showModal==="function") modal.showModal();
+    else modal.setAttribute("open","");
+    button.setAttribute("aria-expanded","true");
+    field.focus();
+  });
+  modal.querySelector(".muse-search-close").addEventListener("click",close);
+  modal.querySelector("form").addEventListener("submit",function(){if(modal.open) modal.close()});
+  modal.addEventListener("click",function(e){if(e.target===modal) close()});
+  modal.addEventListener("close",function(){if(!mq.matches){button.removeAttribute("aria-expanded");return;}button.setAttribute("aria-expanded","false");button.focus()});
+  if(mq.addEventListener) mq.addEventListener("change",sync);
+  sync();
+})();
+</script>
+</body></html>
