@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Coral header Instagram story</title>
+<style>body,h1,h2,h3{font-kerning:normal;letter-spacing:-0.01em}
+  :root {
+    --coral: #FF6371;
+    --coral-transparent: #FF637100;
+    --brand-violet: #5A19A5;
+    --brand-violet-transparent: #5A19A500;
+    --dark-violet: #1E0032;
+  }
+  html, body {
+    margin: 0;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: var(--dark-violet);
+  }
+  .story {
+    width: 1080px;
+    height: 1920px;
+    background:
+      radial-gradient(ellipse 110% 100% at 100% 0%, var(--brand-violet) 28%, var(--brand-violet-transparent) 85%),
+      radial-gradient(ellipse 90% 105% at 0% 100%, color-mix(in srgb, var(--coral) 70%, transparent) 0%, color-mix(in srgb, var(--coral) 70%, transparent) 25%, var(--coral-transparent) 72%),
+      radial-gradient(ellipse 80% 95% at 100% 100%, color-mix(in srgb, var(--coral) 50%, transparent) 0%, color-mix(in srgb, var(--coral) 50%, transparent) 22%, var(--coral-transparent) 67%),
+      var(--dark-violet);
+  }
+</style>
+</head>
+<body>
+  <div class="story"></div>
+</body>
+</html>
